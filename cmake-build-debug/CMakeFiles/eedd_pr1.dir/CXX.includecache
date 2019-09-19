@@ -1,0 +1,24 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/Users/manuel/CLionProjects/eedd-pr1/main.cpp
+cstdlib
+-
+vector
+-
+list
+-
+string
+-
+fstream
+-
+sstream
+-
+iostream
+-
+
