@@ -1,122 +1,86 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * @file main.cpp
+ * @author Manuel Alférez Ruiz y Raúl Zucar Aceituno
+ * @date on 26 de septiembre de 2019, 13:05
+ * @note Práctica 1. Implementación de vector dinámico mediante plantillas y operadores en C++
  */
 
-/* 
- * File:   main.cpp
- * Author: lidia
- *
- */
-
-#include <cstdlib>
 #include <vector>
 #include <list>
 #include <string>
 #include <fstream>
 #include <sstream>
-#include <iostream>
 
+#define NOMBRE_ARCHIVO "/clientes_v2.csv";
+
+#include "Cliente.h"
 
 using namespace std;
 
-/*
- coordenadas UTM formadas por latitud y longitud 
-*/
+void leeClientes(string fileNameClientes) {
+    ifstream fe;
+    string linea;
+    int total = 0;
 
-struct UTM{
-    double latitud;
-    double longitud;
-    UTM (double _lat, double _long): latitud(_lat), longitud (_long){}
-};
-
-
-/**
-Clase Cliente
-**/
-
-class Cliente {
-    string dni;
-    string pass;
-    string nombre;
-    string direccion;
-    UTM posicion;
-
-public:
-    //Constructor
-    Cliente(string _dni, string _pass, string _nombre, string _direccion, double _latitud, double _longitud):
-            dni(_dni), pass(_pass), nombre(_nombre), direccion (_direccion), posicion (_latitud, _longitud){}
-};
-
-
-void leeClientes(string fileNameClientes){
-    ifstream fe;                    //Flujo de entrada
-    string linea;                   //Cada línea tiene un clienete
-    int total = 0;                  //Contador de líneas o clientes
-
-    //Variables auxiliares para almacenar los valores leídos
     string dni, nombre, pass, direccion, latitud, longitud;
     double dlat, dlon;
-
-
 
     //Asociamos el flujo al fichero 
     fe.open(fileNameClientes);
 
-    if(fe.good()){
+    if (fe.good()) {
         //Mientras no se haya llegado al final del fichero
-        while(!fe.eof()){
-            getline(fe, linea);     //Toma una línea del fichero
+        while (!fe.eof()) {
+            getline(fe, linea);
             stringstream ss;        //Stream que trabaja sobre buffer interno         
 
-            if(linea!=""){
+            if (linea != "") {
                 ++total;
             }
-
-            if(total>1){
-                //Inicializamos el contenido de ss
+            if (total > 1) {
                 ss << linea;
-
-                //Leemos el NIF
-                getline(ss,dni,';');            //El carácter ; se lee y se elimina de ss
-
-                //Leemos el pass
-                getline(ss,pass,';');           //El caráter ; se lee y se elimina de ss
-
-                //Leemos el nombre
-                getline(ss,nombre,';');         //El caráter ; se lee y se elimina de ss
-
-                //Leemos la dirección
-                getline(ss,direccion,';');      //El caráter ; se lee y se elimina de ss
-
-                //Leemos la latitud y longitud
-                getline(ss,latitud,';');        //El caráter ; se lee y se elimina de ss
-                getline(ss,longitud,';');       //El caráter ; se lee y se elimina de ss
-
-                dlat = stod(latitud);
-                dlon = stod(longitud);
-
-                //con todos los atributos leídos, se crea el cliente
-                Cliente client (dni, pass, nombre, direccion,dlat, dlon);
-                cout << "leido cliente " << total << "  ";
-            }
-        }
-
-        cout<<"Total de clientes en el fichero: " << total <<endl;
-        fe.close(); //Cerramos el flujo de entrada
-    }else{
-        cerr<<"No se puede abrir el fichero"<<endl;
+                //El carácter ; se lee y se elimina de ss
+                getline(ss, dni, ';');
+                getline(ss, pass, ';');
+                getline(ss, nombre, ';');
+                getline(ss, direccion, ';');
+                getline(ss, latitud, ';');
+                getline(ss, longitud, ';');
+                replace(latitud.begin(), latitud.end(), ',', '.');
+                replace(longitud.begin(), longitud.end(), ',', '.');
+                dlat = stold(latitud);
+                dlon = stold(longitud);
+                cout << "latitud: " << dlat << "|  longitud: "<< dlon<< endl;
+                Cliente client(dni, pass, nombre, direccion, dlat, dlon);
+            } //if
+        } //while
+        cout << "Total de clientes en el fichero: " << total << endl;
+        fe.close();
+    } else {
+        cerr << "No se puede abrir el fichero" << endl;
     }
 }
 
+/**
+ * @brief Calcula la dirección del archivo especificado en la macro-variable
+ *
+ * @note Funcionamiento. Calculamos el path del directorio de trabajo (pwd)
+ *       Dicho path está ubicado en el cmake. Eliminamos la última entrada del path y nos
+ *       ubicamos en /eedd-pr1.
+ *       Después añadimos el nombre del archivo de datos.
+ * @return direccion Contiene la ruta hasta el archivo de datos
+ */
+string calcularDireccion() {
+    string direccion = getenv("PWD");
+    direccion = direccion.substr(0, direccion.find_last_of("/"));
+    direccion += NOMBRE_ARCHIVO;
+    return direccion;
+} // calcularDireccion()
 
-
-int main(int argc, char** argv) {
-
-    cout << "Comienzo de lectura de un fichero " << endl;
-
-    leeClientes ("clientes_v2.csv");
+int main(int argc, char **argv) {
+    cout << "Comienzo de lectura de un fichero" << endl;
+    string dir_file = calcularDireccion();
+    leeClientes(dir_file);
     return 0;
-}
+} // main
 

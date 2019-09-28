@@ -80,6 +80,15 @@
 				</MakeCommands>
 			</Target>
 		</Build>
+		<Unit filename="/Users/manuel/CLionProjects/eedd-pr1/Cliente.cpp">
+			<Option target="eedd_pr1"/>
+		</Unit>
+		<Unit filename="/Users/manuel/CLionProjects/eedd-pr1/Cliente.h">
+			<Option target="eedd_pr1"/>
+		</Unit>
+		<Unit filename="/Users/manuel/CLionProjects/eedd-pr1/VDinamico.h">
+			<Option target="eedd_pr1"/>
+		</Unit>
 		<Unit filename="/Users/manuel/CLionProjects/eedd-pr1/main.cpp">
 			<Option target="eedd_pr1"/>
 		</Unit>

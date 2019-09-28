@@ -123,6 +123,33 @@ eedd_pr1/fast:
 	$(MAKE) -f CMakeFiles/eedd_pr1.dir/build.make CMakeFiles/eedd_pr1.dir/build
 .PHONY : eedd_pr1/fast
 
+Cliente.o: Cliente.cpp.o
+
+.PHONY : Cliente.o
+
+# target to build an object file
+Cliente.cpp.o:
+	$(MAKE) -f CMakeFiles/eedd_pr1.dir/build.make CMakeFiles/eedd_pr1.dir/Cliente.cpp.o
+.PHONY : Cliente.cpp.o
+
+Cliente.i: Cliente.cpp.i
+
+.PHONY : Cliente.i
+
+# target to preprocess a source file
+Cliente.cpp.i:
+	$(MAKE) -f CMakeFiles/eedd_pr1.dir/build.make CMakeFiles/eedd_pr1.dir/Cliente.cpp.i
+.PHONY : Cliente.cpp.i
+
+Cliente.s: Cliente.cpp.s
+
+.PHONY : Cliente.s
+
+# target to generate assembly for a file
+Cliente.cpp.s:
+	$(MAKE) -f CMakeFiles/eedd_pr1.dir/build.make CMakeFiles/eedd_pr1.dir/Cliente.cpp.s
+.PHONY : Cliente.cpp.s
+
 main.o: main.cpp.o
 
 .PHONY : main.o
@@ -159,6 +186,9 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
 	@echo "... eedd_pr1"
+	@echo "... Cliente.o"
+	@echo "... Cliente.i"
+	@echo "... Cliente.s"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"

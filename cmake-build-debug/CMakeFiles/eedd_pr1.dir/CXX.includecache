@@ -6,9 +6,11 @@
 
 #IncludeRegexTransform: 
 
-/Users/manuel/CLionProjects/eedd-pr1/main.cpp
-cstdlib
+/Users/manuel/CLionProjects/eedd-pr1/Cliente.h
+iostream
 -
+
+/Users/manuel/CLionProjects/eedd-pr1/main.cpp
 vector
 -
 list
@@ -19,6 +21,6 @@ fstream
 -
 sstream
 -
-iostream
--
+Cliente.h
+/Users/manuel/CLionProjects/eedd-pr1/Cliente.h
 

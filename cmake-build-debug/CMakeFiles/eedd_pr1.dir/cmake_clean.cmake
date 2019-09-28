@@ -1,5 +1,6 @@
 file(REMOVE_RECURSE
   "CMakeFiles/eedd_pr1.dir/main.cpp.o"
+  "CMakeFiles/eedd_pr1.dir/Cliente.cpp.o"
   "eedd_pr1.pdb"
   "eedd_pr1"
 )
