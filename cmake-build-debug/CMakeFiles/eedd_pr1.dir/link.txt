@@ -1,1 +1,0 @@
-/Library/Developer/CommandLineTools/usr/bin/c++  -g -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX10.14.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names  CMakeFiles/eedd_pr1.dir/main.cpp.o CMakeFiles/eedd_pr1.dir/Cliente.cpp.o  -o eedd_pr1 
