@@ -14,8 +14,7 @@
 #define NOMBRE_ARCHIVO "/clientes_v2.csv";
 
 #include "Cliente.h"
-
-using namespace std;
+#include "VDinamico.h"
 
 void leeClientes(string fileNameClientes) {
     ifstream fe;
@@ -50,7 +49,6 @@ void leeClientes(string fileNameClientes) {
                 replace(longitud.begin(), longitud.end(), ',', '.');
                 dlat = stold(latitud);
                 dlon = stold(longitud);
-                cout << "latitud: " << dlat << "|  longitud: "<< dlon<< endl;
                 Cliente client(dni, pass, nombre, direccion, dlat, dlon);
             } //if
         } //while
