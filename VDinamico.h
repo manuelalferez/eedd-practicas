@@ -16,6 +16,7 @@ using namespace std;
 
 template<class T>
 class VDinamico {
+public:
     VDinamico(int _tamf = 1);
     VDinamico(unsigned _tamf);
     VDinamico(const VDinamico<T> &orig);
@@ -29,9 +30,11 @@ class VDinamico {
     T &operator[](unsigned pos);
     void insertar(const T &dato, unsigned pos = UINT_MAX);
     T borrar(unsigned pos = UINT_MAX);
-    void ordenar() { sort(v, v + taml); };
+    void ordenar() { std::sort(v, v + taml); };
     int busquedaBin(T &dato);
     unsigned tam() { return this->taml; }
+    T lee(unsigned pos);
+    string eliminar(T &dato);
 private:
     unsigned taml, tamf;
     T *v;
@@ -44,8 +47,12 @@ VDinamico<T>::VDinamico(int _tamf):
 
 template<class T>
 VDinamico<T>::VDinamico(unsigned _tamf): taml(0) {
-    for (int i = 0; tamf < _tamf; i++)
-        tamf = pow(2, i);
+    unsigned exp;
+    // Calculamos el exponente redondeando al entero superior ---tamL < 2^x ---
+    // log2 (tamL) < x * log2 (2)-> log2(tamL)/log2(2)<x
+    exp = ceil(log2(taml) / log2(2));
+    tamf = (taml < pow(2, exp)) ? pow(2, exp) : pow(2, exp + 1);
+
     v = new T[tamf];
 }
 
@@ -90,7 +97,7 @@ T &VDinamico<T>::operator[](unsigned pos) {
 template<class T>
 void VDinamico<T>::insertar(const T &dato, unsigned int pos) {
     // Posición fuera de rango
-    if (pos >= tamf || pos < 0) {
+    if (pos < 0) {
         throw out_of_range("[VDinamico<T>::insertar]: Fuera de rango.");
     } else {
         // Vector lleno
@@ -156,4 +163,30 @@ int VDinamico<T>::busquedaBin(T &dato) {
     return -1;
 } // busquedaBin()
 
+template<class T>
+T VDinamico<T>::lee(unsigned pos) {
+    if (pos > taml || pos < 0)
+        throw std::out_of_range("[VDinamico<T>::lee]: Posición fuera de rango.");
+    return v[pos];
+}
+
+template<class T>
+string VDinamico<T>::eliminar(T &dato) {
+    int pos = 0;
+    int contador = 0;
+    do {
+        pos = this->busquedaBin(dato);
+        if (pos != -1) {
+            contador++;
+            // Sobreescribimos
+            for (int i = pos; i < taml; i++)
+                v[i] = v[i + 1];
+            taml--;
+        }
+    } while (pos != -1);
+    if (contador > 0) {
+        return "Se han eliminado " + to_string(contador) + " dato(s).";
+    } else return "No se han eliminado ningún dato.";
+
+}
 #endif //EEDD_PR1_VDINAMICO_H

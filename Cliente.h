@@ -9,13 +9,15 @@
 #define EEDD_PR1_CLIENTE_H
 
 #include <iostream>
+#include <math.h>
+
 using namespace std;
 
 // Coordenadas UTM formadas por latitud y longitud
-struct UTM{
+struct UTM {
     double latitud;
     double longitud;
-    UTM (double _lat, double _long): latitud(_lat), longitud (_long){}
+    UTM(double _lat, double _long) : latitud(_lat), longitud(_long) {}
 };
 
 
@@ -27,7 +29,14 @@ class Cliente {
     UTM posicion;
 
 public:
+    Cliente() : dni(""), pass(""), nombre(""), direccion(""), posicion(0, 0) {};
     Cliente(string _dni, string _pass, string _nombre, string _direccion, double _latitud, double _longitud);
+    bool operator<(const Cliente &c) const;
+    bool operator==(const Cliente &c) const;
+    string imprimir();
+    void setNombre(string _nombre) { this->nombre = _nombre; }
+    double calculaDistancia(Cliente &c);
+    string getNombre() { return this->nombre; }
 };
 
 

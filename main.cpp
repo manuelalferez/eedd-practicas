@@ -11,12 +11,13 @@
 #include <fstream>
 #include <sstream>
 
-#define NOMBRE_ARCHIVO "/clientes_v2.csv";
+#define NOMBRE_ARCHIVO "/clientes_v2.csv"
+#define NUM_MOSTRAR 6
 
 #include "Cliente.h"
 #include "VDinamico.h"
 
-void leeClientes(string fileNameClientes) {
+void leeClientes(string _fileNameClientes, VDinamico<Cliente> &_clientes) {
     ifstream fe;
     string linea;
     int total = 0;
@@ -25,7 +26,7 @@ void leeClientes(string fileNameClientes) {
     double dlat, dlon;
 
     //Asociamos el flujo al fichero 
-    fe.open(fileNameClientes);
+    fe.open(_fileNameClientes);
 
     if (fe.good()) {
         //Mientras no se haya llegado al final del fichero
@@ -49,15 +50,16 @@ void leeClientes(string fileNameClientes) {
                 replace(longitud.begin(), longitud.end(), ',', '.');
                 dlat = stold(latitud);
                 dlon = stold(longitud);
-                Cliente client(dni, pass, nombre, direccion, dlat, dlon);
+                Cliente cliente(dni, pass, nombre, direccion, dlat, dlon);
+                _clientes.insertar(cliente, UINT_MAX);
             } //if
         } //while
-        cout << "Total de clientes en el fichero: " << total << endl;
+        cout << "Total de clientes en el fichero: " << total - 1 << endl;
         fe.close();
     } else {
         cerr << "No se puede abrir el fichero" << endl;
     }
-}
+} // leeClientes()
 
 /**
  * @brief Calcula la dirección del archivo especificado en la macro-variable
@@ -75,10 +77,63 @@ string calcularDireccion() {
     return direccion;
 } // calcularDireccion()
 
+void imprimirClientes(VDinamico<Cliente> _clientes, int _num_pos = UINT_MAX) {
+    if (_num_pos == UINT_MAX) _num_pos = _clientes.tam();
+    if (_num_pos < 0 || _num_pos > _clientes.tam()) {
+        throw out_of_range("[main:imprimirClientes]: Posición fuera de rango");
+    } else {
+        for (int i = 0; i < _num_pos; i++) {
+            cout << _clientes.lee(i).imprimir() << endl;
+        }
+    }
+} //imprimirClientes()
+
 int main(int argc, char **argv) {
     cout << "Comienzo de lectura de un fichero" << endl;
     string dir_file = calcularDireccion();
-    leeClientes(dir_file);
+
+    //Instanciación del vector de clientes
+    VDinamico<Cliente> clientes;
+    leeClientes(dir_file, clientes);
+    cout << "\nClientes: " << endl;
+    imprimirClientes(clientes, NUM_MOSTRAR);
+    cout << "... " << endl;
+
+    // Ordenación de los clientes
+    VDinamico<Cliente> clientes_ordenados = clientes;
+    clientes_ordenados.ordenar();
+    cout << "\nClientes ordenados: " << endl;
+    imprimirClientes(clientes_ordenados, NUM_MOSTRAR);
+    cout << "... \n" << endl;
+
+    // Eliminar todos los clientes con un nombre dato
+    Cliente cli;
+    cli.setNombre("Aarika Eilles");
+    cout << clientes_ordenados.eliminar(cli) << endl;
+    imprimirClientes(clientes_ordenados, NUM_MOSTRAR);
+
+    // Calcular distancia entre los clientes más alejados
+    int pos_cliente_1 = 0, pos_cliente_2 = 0;
+    double mayor_distancia_clientes = -INFINITY;
+
+    for (int i = 0; i < clientes_ordenados.tam() - 1; i++)
+        for (int j = i + 1; j < clientes_ordenados.tam(); j++) {
+            if (i != j) {
+                Cliente c1 = clientes_ordenados.lee(i);
+                Cliente c2 = clientes_ordenados.lee(j);
+                double distancia = c1.calculaDistancia(c2);
+                if (mayor_distancia_clientes < distancia) {
+                    mayor_distancia_clientes = distancia;
+                    pos_cliente_1 = i;
+                    pos_cliente_2 = j;
+                }
+            }
+        }
+    cout << "\nClientes con mayor distancia: " << endl;
+    cout << clientes_ordenados.lee(pos_cliente_1).getNombre() + " - "
+            + clientes_ordenados.lee(pos_cliente_2).getNombre() + "| Distancia: " + to_string(mayor_distancia_clientes)
+         << endl;
+
     return 0;
 } // main
 
