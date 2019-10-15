@@ -10,6 +10,8 @@
 
 #include <iostream>
 #include <math.h>
+#include <string>
+#include <sstream>
 
 using namespace std;
 

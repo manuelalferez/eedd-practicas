@@ -5,6 +5,7 @@
  * @note Práctica 1. Implementación de vector dinámico mediante plantillas y operadores en C++
  */
 
+
 #include "Cliente.h"
 
 Cliente::Cliente(string _dni, string _pass, string _nombre, string _direccion, double _latitud, double _longitud) :
@@ -14,8 +15,17 @@ bool Cliente::operator<(const Cliente &c) const {
     return this->nombre < c.nombre;
 }
 
+/*
+ * Compara si dos nombres de clientes son iguales
+ *
+ * Devuelve verdadero si son iguales y falso en caso contrario
+ */
 bool Cliente::operator==(const Cliente &c) const {
-    return this->nombre == c.nombre;
+    stringstream ss;
+    ss<< this->nombre;
+    string this_nombre;
+    getline(ss, this_nombre, ' ');
+    return this_nombre == c.nombre;
 }
 
 string Cliente::imprimir() {

@@ -12,7 +12,7 @@
 #include <sstream>
 
 #define NOMBRE_ARCHIVO "/clientes_v2.csv"
-#define NUM_MOSTRAR 6
+#define NUM_MOSTRAR 20
 
 #include "Cliente.h"
 #include "VDinamico.h"
@@ -108,7 +108,7 @@ int main(int argc, char **argv) {
 
     // Eliminar todos los clientes con un nombre dato
     Cliente cli;
-    cli.setNombre("Aarika Eilles");
+    cli.setNombre("Salomi");
     cout << clientes_ordenados.eliminar(cli) << endl;
     imprimirClientes(clientes_ordenados, NUM_MOSTRAR);
 
