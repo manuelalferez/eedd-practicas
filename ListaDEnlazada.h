@@ -24,7 +24,7 @@ public:
 
     T &inicio() { return cabecera->dato; }
     T &fin() { return cola->dato; }
-    Iterador<T> &iterador() { return Iterador<T>(cabecera); }
+    Iterador<T> iterador() { return Iterador<T>(cabecera); }
 
     void insertaInicio(T &_dato);
     void insertarFin(T &_dato);
@@ -34,7 +34,7 @@ public:
     void borraFinal();
     void borra(Iterador<T> &_i);
 
-    int tam(){return this->tama};
+    int tam() { return this->tama; }
 
     ListaDEnlazada<T> &concatena(ListaDEnlazada<T> &_l);
 
@@ -85,7 +85,7 @@ ListaDEnlazada<T> &ListaDEnlazada<T>::operator=(const ListaDEnlazada<T> &orig) {
 
             if (orig.cabecera == orig.cola) cola = cabecera;
             else cola = i;
-        } else cabecera == cola == 0;
+        } else cabecera = cola = 0;
         this->tama = orig.tama;
     }
     return *this;
@@ -193,11 +193,11 @@ void ListaDEnlazada<T>::borra(Iterador<T> &_i) {
     }
 } //borra()
 
-template <class T>
-ListaDEnlazada<T>& ListaDEnlazada<T>::concatena(ListaDEnlazada<T> &_l) {
-    if(_l.tama!=0) {
+template<class T>
+ListaDEnlazada<T> &ListaDEnlazada<T>::concatena(ListaDEnlazada<T> &_l) {
+    if (_l.tama != 0) {
         auto i = _l.iterador();
-        while(i!=0) {
+        while (i != 0) {
             this->insertarFin(i.nodo->dato);
             i.siguiente();
         }
@@ -205,7 +205,7 @@ ListaDEnlazada<T>& ListaDEnlazada<T>::concatena(ListaDEnlazada<T> &_l) {
     return *this;
 }
 
-template <class T>
+template<class T>
 ListaDEnlazada<T>::~ListaDEnlazada() {
     while (cabecera != cola != 0) {
         Nodo<T> *borrado = cabecera;

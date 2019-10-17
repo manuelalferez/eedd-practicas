@@ -12,7 +12,7 @@
 #include <sstream>
 
 #define NOMBRE_ARCHIVO "/clientes_v2.csv"
-#define NUM_MOSTRAR 20
+#define NUM_MOSTRAR 5
 
 #include "Cliente.h"
 #include "VDinamico.h"
@@ -133,6 +133,25 @@ int main(int argc, char **argv) {
     cout << clientes_ordenados.lee(pos_cliente_1).getNombre() + " - "
             + clientes_ordenados.lee(pos_cliente_2).getNombre() + "| Distancia: " + to_string(mayor_distancia_clientes)
          << endl;
+
+    // Mostramos NUM_MOSTRAR clientes con sus respectivos itinerarios
+    int mostrados = 0, cliente_aleatorio;
+    while (mostrados != NUM_MOSTRAR) {
+        cliente_aleatorio = rand() % clientes.tam();
+        cout << "\nNombre: " + clientes.lee(cliente_aleatorio).getNombre() << endl;
+        Cliente cli2 = clientes.lee(cliente_aleatorio);
+        cli2.crearItinerarios();
+        auto it = cli2.getItinerarios().iterador();
+        while (!it.fin()) {
+            cout << "- id: " << it.dato().getId() << "|  UTM inicio: " << it.dato().getInicio().latitud << ", "
+                 << it.dato().getInicio().longitud << " | UTM fin: " << it.dato().getFin().latitud << ", " <<
+                 it.dato().getFin().longitud << " | Fecha: " << it.dato().getFecha().cadena() << " | Minutos: " <<
+                 it.dato().getMinutos()
+                 << endl;
+            it.siguiente();
+        }
+        mostrados++;
+    }
 
     return 0;
 } // main

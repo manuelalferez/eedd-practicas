@@ -11,27 +11,18 @@
 #include <iostream>
 #include <math.h>
 #include <string>
+#include<stdlib.h>
+#include <cfloat>
 #include <sstream>
+#include "ListaDEnlazada.h"
+#include "Itinerario.h"
+#include "fecha.h"
 
 using namespace std;
 
-// Coordenadas UTM formadas por latitud y longitud
-struct UTM {
-    double latitud;
-    double longitud;
-    UTM(double _lat, double _long) : latitud(_lat), longitud(_long) {}
-};
-
-
 class Cliente {
-    string dni;
-    string pass;
-    string nombre;
-    string direccion;
-    UTM posicion;
-
 public:
-    Cliente() : dni(""), pass(""), nombre(""), direccion(""), posicion(0, 0) {};
+    Cliente() : dni(""), pass(""), nombre(""), direccion(""), posicion(0, 0), itinerarios() {};
     Cliente(string _dni, string _pass, string _nombre, string _direccion, double _latitud, double _longitud);
     bool operator<(const Cliente &c) const;
     bool operator==(const Cliente &c) const;
@@ -39,6 +30,19 @@ public:
     void setNombre(string _nombre) { this->nombre = _nombre; }
     double calculaDistancia(Cliente &c);
     string getNombre() { return this->nombre; }
+    void crearItinerarios();
+    ListaDEnlazada<Itinerario>& getItinerarios() { return itinerarios; }
+private:
+    string dni;
+    string pass;
+    string nombre;
+    string direccion;
+    UTM posicion;
+    ListaDEnlazada<Itinerario> itinerarios;
+
+    static UTM coordenada_max;
+
+    static UTM coordenada_min;
 };
 
 

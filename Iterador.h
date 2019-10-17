@@ -17,7 +17,7 @@ template<class T>
 class Iterador {
 private:
     Nodo<T> *nodo;
-    friend class ListaDEnlazada;
+    friend class ListaDEnlazada<T>;
 public:
     Iterador(Nodo<T> *_nodo) : nodo(_nodo) {}
     bool hayAnterior() { return nodo->ant != 0; }
@@ -25,6 +25,8 @@ public:
     void anterior() { nodo = nodo->ant; }
     void siguiente() { nodo = nodo->sig; }
     T &dato() { return nodo->dato; }
+    bool fin() { return nodo == 0;}
+
 
     Iterador<T>& operator=(const Iterador<T> &i);
 };
