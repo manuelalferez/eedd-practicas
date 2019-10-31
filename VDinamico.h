@@ -33,7 +33,7 @@ public:
     void ordenar() { std::sort(v, v + taml); };
     int busquedaBin(T &dato);
     unsigned tam() { return this->taml; }
-    T lee(unsigned pos);
+    T* lee(unsigned pos);
     string eliminar(T &dato);
 private:
     unsigned taml, tamf;
@@ -164,10 +164,10 @@ int VDinamico<T>::busquedaBin(T &dato) {
 } // busquedaBin()
 
 template<class T>
-T VDinamico<T>::lee(unsigned pos) {
+T* VDinamico<T>::lee(unsigned pos) {
     if (pos > taml || pos < 0)
         throw std::out_of_range("[VDinamico<T>::lee]: Posición fuera de rango.");
-    return v[pos];
+    return &v[pos];
 }
 
 template<class T>

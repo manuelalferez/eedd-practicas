@@ -14,34 +14,50 @@
 #include<stdlib.h>
 #include <cfloat>
 #include <sstream>
+
 #include "ListaDEnlazada.h"
-#include "Itinerario.h"
 #include "fecha.h"
+#include "Itinerario.h"
+#include "EcoCityMoto.h"
 
 using namespace std;
 
+class EcoCityMoto;
+
 class Cliente {
 public:
-    Cliente() : dni(""), pass(""), nombre(""), direccion(""), posicion(0, 0), itinerarios() {};
-    Cliente(string _dni, string _pass, string _nombre, string _direccion, double _latitud, double _longitud);
+    Cliente() : dni(""), pass(""), nombre(""), direccion(""), posicion(0, 0), rutas(), acceso(0) {};
+    Cliente(string _dni, string _pass, string _nombre, string _direccion, double _latitud, double _longitud,
+            EcoCityMoto *_acceso);
+    virtual ~Cliente() {}
     bool operator<(const Cliente &c) const;
+    bool operator>(const Cliente &c) const;
     bool operator==(const Cliente &c) const;
     string imprimir();
-    void setNombre(string _nombre) { this->nombre = _nombre; }
+    void setNombre(string _nombre) { this->nombre = _nombre; };
+    void setDni(string _dni) { this->dni = _dni; };
     double calculaDistancia(Cliente &c);
-    string getNombre() { return this->nombre; }
+    string getNombre() { return this->nombre; };
+    string getDni() { return this->dni; };
     void crearItinerarios();
-    ListaDEnlazada<Itinerario>& getItinerarios() { return itinerarios; }
+    ListaDEnlazada<Itinerario> &getItinerarios() { return rutas; };
+
+    string mostrar();
+    Moto *buscarMotoCercana();
+    void desbloquearMoto(Moto &moto);
+    void terminarTrayecto(UTM min, UTM max);
+    UTM getUTM(UTM min, UTM max);
 private:
     string dni;
     string pass;
     string nombre;
     string direccion;
     UTM posicion;
-    ListaDEnlazada<Itinerario> itinerarios;
+    ListaDEnlazada<Itinerario> rutas;
+    EcoCityMoto *acceso;
+
 
     static UTM coordenada_max;
-
     static UTM coordenada_min;
 };
 

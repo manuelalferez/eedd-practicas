@@ -11,58 +11,14 @@
 #include <fstream>
 #include <sstream>
 
-#define NOMBRE_ARCHIVO "/clientes_v2.csv"
 #define NUM_MOSTRAR 5
 
 #include "Cliente.h"
 #include "VDinamico.h"
-
-void leeClientes(string _fileNameClientes, VDinamico<Cliente> &_clientes) {
-    ifstream fe;
-    string linea;
-    int total = 0;
-
-    string dni, nombre, pass, direccion, latitud, longitud;
-    double dlat, dlon;
-
-    //Asociamos el flujo al fichero 
-    fe.open(_fileNameClientes);
-
-    if (fe.good()) {
-        //Mientras no se haya llegado al final del fichero
-        while (!fe.eof()) {
-            getline(fe, linea);
-            stringstream ss;        //Stream que trabaja sobre buffer interno         
-
-            if (linea != "") {
-                ++total;
-            }
-            if (total > 1) {
-                ss << linea;
-                //El carácter ; se lee y se elimina de ss
-                getline(ss, dni, ';');
-                getline(ss, pass, ';');
-                getline(ss, nombre, ';');
-                getline(ss, direccion, ';');
-                getline(ss, latitud, ';');
-                getline(ss, longitud, ';');
-                replace(latitud.begin(), latitud.end(), ',', '.');
-                replace(longitud.begin(), longitud.end(), ',', '.');
-                dlat = stold(latitud);
-                dlon = stold(longitud);
-                Cliente cliente(dni, pass, nombre, direccion, dlat, dlon);
-                _clientes.insertar(cliente, UINT_MAX);
-            } //if
-        } //while
-        cout << "Total de clientes en el fichero: " << total - 1 << endl;
-        fe.close();
-    } else {
-        cerr << "No se puede abrir el fichero" << endl;
-    }
-} // leeClientes()
+#include "EcoCityMoto.h"
 
 /**
- * @brief Calcula la dirección del archivo especificado en la macro-variable
+ * @brief Calcula la dirección del archivo
  *
  * @note Funcionamiento. Calculamos el path del directorio de trabajo (pwd)
  *       Dicho path está ubicado en el cmake. Eliminamos la última entrada del path y nos
@@ -70,10 +26,10 @@ void leeClientes(string _fileNameClientes, VDinamico<Cliente> &_clientes) {
  *       Después añadimos el nombre del archivo de datos.
  * @return direccion Contiene la ruta hasta el archivo de datos
  */
-string calcularDireccion() {
+string calcularDireccion(string nombreArchivo) {
     string direccion = getenv("PWD");
     direccion = direccion.substr(0, direccion.find_last_of("/"));
-    direccion += NOMBRE_ARCHIVO;
+    direccion += nombreArchivo;
     return direccion;
 } // calcularDireccion()
 
@@ -83,75 +39,45 @@ void imprimirClientes(VDinamico<Cliente> _clientes, int _num_pos = UINT_MAX) {
         throw out_of_range("[main:imprimirClientes]: Posición fuera de rango");
     } else {
         for (int i = 0; i < _num_pos; i++) {
-            cout << _clientes.lee(i).imprimir() << endl;
+            cout << _clientes.lee(i)->imprimir() << endl;
         }
     }
 } //imprimirClientes()
 
 int main(int argc, char **argv) {
     cout << "Comienzo de lectura de un fichero" << endl;
-    string dir_file = calcularDireccion();
+    string direccionArchivoClientes = calcularDireccion("/clientes_v2.csv");
+    string direccionArchivoMotos = calcularDireccion("/motos.txt");
 
-    //Instanciación del vector de clientes
-    VDinamico<Cliente> clientes;
-    leeClientes(dir_file, clientes);
-    cout << "\nClientes: " << endl;
-    imprimirClientes(clientes, NUM_MOSTRAR);
-    cout << "... " << endl;
 
-    // Ordenación de los clientes
-    VDinamico<Cliente> clientes_ordenados = clientes;
-    clientes_ordenados.ordenar();
-    cout << "\nClientes ordenados: " << endl;
-    imprimirClientes(clientes_ordenados, NUM_MOSTRAR);
-    cout << "... \n" << endl;
+    // Crear un árbol AVL con los clientes de la base de datos proporcionada en la práctica 1 (clientes_v2.csv).
+    // La clave ahora es el dni.
+    // Cargar las motos usando el fichero adjunto (motos.csv)
+    EcoCityMoto empresaMotos(direccionArchivoMotos, direccionArchivoClientes);
 
-    // Eliminar todos los clientes con un nombre dato
-    Cliente cli;
-    cli.setNombre("Salomi");
-    cout << clientes_ordenados.eliminar(cli) << endl;
-    imprimirClientes(clientes_ordenados, NUM_MOSTRAR);
+    // Mostrar el árbol AVL en inorden.
+    empresaMotos.mostrarClientesInorden();
 
-    // Calcular distancia entre los clientes más alejados
-    int pos_cliente_1 = 0, pos_cliente_2 = 0;
-    double mayor_distancia_clientes = -INFINITY;
+    // Mostrar la altura del árbol AVL
+    empresaMotos.mostrarAltura();
 
-    for (int i = 0; i < clientes_ordenados.tam() - 1; i++)
-        for (int j = i + 1; j < clientes_ordenados.tam(); j++) {
-            if (i != j) {
-                Cliente c1 = clientes_ordenados.lee(i);
-                Cliente c2 = clientes_ordenados.lee(j);
-                double distancia = c1.calculaDistancia(c2);
-                if (mayor_distancia_clientes < distancia) {
-                    mayor_distancia_clientes = distancia;
-                    pos_cliente_1 = i;
-                    pos_cliente_2 = j;
-                }
-            }
-        }
-    cout << "\nClientes con mayor distancia: " << endl;
-    cout << clientes_ordenados.lee(pos_cliente_1).getNombre() + " - "
-            + clientes_ordenados.lee(pos_cliente_2).getNombre() + "| Distancia: " + to_string(mayor_distancia_clientes)
-         << endl;
-
-    // Mostramos NUM_MOSTRAR clientes con sus respectivos itinerarios
-    int mostrados = 0, cliente_aleatorio;
-    while (mostrados != NUM_MOSTRAR) {
-        cliente_aleatorio = rand() % clientes.tam();
-        cout << "\nNombre: " + clientes.lee(cliente_aleatorio).getNombre() << endl;
-        Cliente cli2 = clientes.lee(cliente_aleatorio);
-        cli2.crearItinerarios();
-        auto it = cli2.getItinerarios().iterador();
-        while (!it.fin()) {
-            cout << "- id: " << it.dato().getId() << "|  UTM inicio: " << it.dato().getInicio().latitud << ", "
-                 << it.dato().getInicio().longitud << " | UTM fin: " << it.dato().getFin().latitud << ", " <<
-                 it.dato().getFin().longitud << " | Fecha: " << it.dato().getFecha().cadena() << " | Minutos: " <<
-                 it.dato().getMinutos()
-                 << endl;
-            it.siguiente();
-        }
-        mostrados++;
+    // Buscar un cliente en el árbol dado su DNI
+    Cliente *cliente = empresaMotos.buscarCliente("67462104W");
+    if (cliente) {
+        cout << "Cliente encontrado, nombre: " + cliente->getNombre() << endl;
+    } else {
+        cout << "Cliente con DNI (67462104W) no encontrado." << endl;
     }
+
+    // Simular que ese cliente quiere desplazarse, localiza la moto más cercana y hace un
+    // trayecto con un final aleatorio dentro del rango (37, 3) - (38,4) correspondiente a la zona de Jaén.
+    UTM min(37, 3);
+    UTM max(38, 4);
+    Moto *moto = cliente->buscarMotoCercana();
+    cliente->desbloquearMoto(*moto);
+    cout << "Moto desbloqueada, " + cliente->getNombre() + " esta moviendose..." << endl;
+    cliente->terminarTrayecto(min, max);
+    cout << "Moto bloqueada" << endl;
 
     return 0;
 } // main

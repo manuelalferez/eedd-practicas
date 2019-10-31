@@ -7,12 +7,14 @@
 
 
 #include "Cliente.h"
-UTM Cliente::coordenada_min(DBL_MAX,DBL_MAX);
-UTM Cliente::coordenada_max(DBL_MIN,DBL_MIN);
+
+UTM Cliente::coordenada_min(DBL_MAX, DBL_MAX);
+UTM Cliente::coordenada_max(DBL_MIN, DBL_MIN);
 
 
-Cliente::Cliente(string _dni, string _pass, string _nombre, string _direccion, double _latitud, double _longitud) :
-        dni(_dni), pass(_pass), nombre(_nombre), direccion(_direccion), posicion(_latitud, _longitud) {
+Cliente::Cliente(string _dni, string _pass, string _nombre, string _direccion, double _latitud, double _longitud,
+                 EcoCityMoto *_acceso) :
+        dni(_dni), pass(_pass), nombre(_nombre), direccion(_direccion), posicion(_latitud, _longitud), acceso(_acceso) {
     if (_latitud < coordenada_min.latitud) coordenada_min.latitud = _latitud;
     if (_latitud > coordenada_max.latitud) coordenada_max.latitud = _latitud;
     if (_longitud < coordenada_min.longitud) coordenada_min.longitud = _longitud;
@@ -21,6 +23,9 @@ Cliente::Cliente(string _dni, string _pass, string _nombre, string _direccion, d
 
 bool Cliente::operator<(const Cliente &c) const {
     return this->nombre < c.nombre;
+}
+bool Cliente::operator>(const Cliente &c) const {
+    return this->nombre > c.nombre;
 }
 
 /*
@@ -43,8 +48,7 @@ string Cliente::imprimir() {
 }
 
 double Cliente::calculaDistancia(Cliente &c) {
-    return sqrt(pow(c.posicion.latitud - this->posicion.latitud, 2) +
-                pow(c.posicion.longitud - this->posicion.longitud, 2));
+    return utils::calcularDistancia(this->posicion, c.posicion);
 }
 
 void Cliente::crearItinerarios() {
@@ -52,7 +56,7 @@ void Cliente::crearItinerarios() {
     double latitud_random_ini, longitud_random_ini, latitud_random_fin, longitud_random_fin;
     unsigned minutos_aleatorios, dia, mes, anio = 2019, hora, minuto;
     Fecha fecha;
-    while (itinerarios.tam() != num_itinerarios) {
+    while (rutas.tam() != num_itinerarios) {
         latitud_random_ini = (coordenada_max.latitud - coordenada_min.latitud) *
                              ((double) rand() / (double) RAND_MAX) + coordenada_min.latitud;
         longitud_random_ini = (coordenada_max.longitud - coordenada_min.longitud)
@@ -62,7 +66,7 @@ void Cliente::crearItinerarios() {
         longitud_random_fin = (coordenada_max.longitud - coordenada_min.longitud)
                               * ((double) rand() / (double) RAND_MAX) + coordenada_min.longitud;
 
-        minutos_aleatorios = (unsigned)(1 + rand() % (121 - 1));
+        minutos_aleatorios = (unsigned) (1 + rand() % (121 - 1));
         mes = 1 + rand() % (13 - 1);
         hora = rand() % 24;
         minuto = 0 + rand() % 60;
@@ -84,10 +88,35 @@ void Cliente::crearItinerarios() {
             case 2:
                 dia = 1 + rand() % (29 - 1); // Meses con 28 días
         }
-        fecha.asignarDia(dia,mes,anio);
+        fecha.asignarDia(dia, mes, anio);
         fecha.asignarHora(hora, minuto);
-        Itinerario nuevo_itinerario(itinerarios.tam(), latitud_random_ini, longitud_random_ini, latitud_random_fin,
+        Itinerario nuevo_itinerario(rutas.tam(), latitud_random_ini, longitud_random_ini, latitud_random_fin,
                                     longitud_random_fin, fecha, minutos_aleatorios);
-        this->itinerarios.insertaInicio(nuevo_itinerario);
+        this->rutas.insertaInicio(nuevo_itinerario);
     }
+}
+
+UTM Cliente::getUTM(UTM min, UTM max) {
+    double latitud = min.latitud + rand() % (int) (max.latitud - min.latitud);
+    double longitud = min.longitud + rand() % (int) (max.longitud - min.longitud);
+    UTM nuevoUTM(latitud, longitud);
+    return nuevoUTM;
+}
+
+Moto *Cliente::buscarMotoCercana() {
+    return this->acceso->localizaMotoCercana(this->posicion);
+}
+
+void Cliente::desbloquearMoto(Moto &moto) {
+    this->acceso->desbloquearMoto(moto);
+}
+
+void Cliente::terminarTrayecto(UTM min, UTM max) {
+    auto ultimoItinerario = this->rutas.fin();
+    ultimoItinerario.setFin(this->getUTM(min, max));
+    desbloquearMoto(*ultimoItinerario.getVehiculo());
+}
+
+string Cliente::mostrar() {
+    return "Nombre: " + this->nombre + ", DNI:  " + this->dni;
 }

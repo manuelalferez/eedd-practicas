@@ -9,14 +9,10 @@
 #define EEDD_PR1_ITINERARIO_H
 
 #include "fecha.h"
+#include "Moto.h"
+#include "Utils.h"
 
-// Coordenadas UTM formadas por latitud y longitud
-struct UTM {
-    double latitud;
-    double longitud;
-    UTM(double _lat, double _long) : latitud(_lat), longitud(_long) {}
-};
-
+class Moto;
 class Itinerario {
 public:
     Itinerario(int _id, double _latitud_ini, double _longitud_ini, double _latitud_fin,
@@ -28,13 +24,20 @@ public:
     int getId() { return id; }
     UTM getInicio() { return this->inicio; }
     UTM getFin() { return this->fin; }
+    void setFin(UTM posicionFinal) {
+        fin.latitud = posicionFinal.latitud;
+        fin.longitud = posicionFinal.longitud;
+    };
     Fecha getFecha() { return this->fecha; }
+    Moto *getVehiculo() { return this->vehiculo; }
 private:
     int id;
     UTM inicio;
     UTM fin;
     Fecha fecha;
     int minutos;
+
+    Moto *vehiculo;
 
 };
 
