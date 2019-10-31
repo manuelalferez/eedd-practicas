@@ -1,6 +1,9 @@
-//
-// Created by aabedraba on 31/10/19.
-//
+/**
+ * @file Utils.cpp
+ * @author Manuel Alférez Ruiz y Raúl Zucar Aceituno
+ * @date on 30 de octubre de 2019, 6:23
+ * @note Práctica 3. Arboles AVL
+ */
 
 
 #include "Utils.h"

@@ -22,10 +22,10 @@ Cliente::Cliente(string _dni, string _pass, string _nombre, string _direccion, d
 }
 
 bool Cliente::operator<(const Cliente &c) const {
-    return this->nombre < c.nombre;
+    return this->dni < c.dni;
 }
 bool Cliente::operator>(const Cliente &c) const {
-    return this->nombre > c.nombre;
+    return this->dni > c.dni;
 }
 
 /*
