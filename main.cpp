@@ -13,9 +13,9 @@
 
 #define NUM_MOSTRAR 5
 
-#include "Cliente.h"
 #include "VDinamico.h"
 #include "EcoCityMoto.h"
+class Moto;
 
 /**
  * @brief Calcula la dirección del archivo

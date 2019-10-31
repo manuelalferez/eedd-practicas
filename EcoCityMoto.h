@@ -13,6 +13,7 @@
 #include "Moto.h"
 
 class Moto;
+class Cliente;
 class EcoCityMoto {
 public:
     EcoCityMoto(string direccionMotos, string direccionClientes);
