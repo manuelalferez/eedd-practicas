@@ -48,7 +48,7 @@ string Cliente::imprimir() {
 }
 
 double Cliente::calculaDistancia(Cliente &c) {
-    return utils::calcularDistancia(this->posicion, c.posicion);
+    return Utils::calcularDistancia(this->posicion, c.posicion);
 }
 
 void Cliente::crearItinerarios() {

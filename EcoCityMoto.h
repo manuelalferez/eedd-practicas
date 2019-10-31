@@ -11,6 +11,9 @@
 #include "AVL.h"
 #include "VDinamico.h"
 #include "Moto.h"
+#include <fstream>
+
+
 
 class Moto;
 class Cliente;

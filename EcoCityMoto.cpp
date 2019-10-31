@@ -5,7 +5,6 @@
  * @note Práctica 3. Arboles AVL
  */
 
-#include <fstream>
 #include "EcoCityMoto.h"
 
 EcoCityMoto::EcoCityMoto(string direccionMotos, string direccionClientes) : idUltimo(0), motos(VDinamico<Moto>()),
@@ -111,7 +110,7 @@ Moto *EcoCityMoto::localizaMotoCercana(UTM ubicacion) {
     int distanciaMejor = INT_MAX;
     for (int i = 0; i < motos.tam(); i++) {
         if (motos.lee(i)->estaDisponible()) {
-            int distanciaActual = utils::calcularDistancia(motos.lee(i)->getPosicion(), ubicacion);
+            int distanciaActual = Utils::calcularDistancia(motos.lee(i)->getPosicion(), ubicacion);
             if (distanciaActual < distanciaMejor) {
                 posMejorMoto = i;
                 distanciaMejor = distanciaActual;

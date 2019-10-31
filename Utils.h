@@ -18,11 +18,8 @@ struct UTM {
     UTM() : latitud(0), longitud(0) {}
     UTM(double _lat, double _long) : latitud(_lat), longitud(_long) {}
 };
-namespace utils {
-    int calcularDistancia(UTM inicio, UTM fin){
-        return sqrt(pow(inicio.latitud - fin.latitud, 2) +
-                    pow(inicio.longitud - fin.longitud, 2));
-    }
+namespace Utils {
+    int calcularDistancia(UTM inicio, UTM fin);
 }
 
 #endif //EEDD_PR1_UTILS_H
