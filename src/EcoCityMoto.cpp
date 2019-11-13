@@ -5,6 +5,7 @@
  * @note Práctica 3. Arboles AVL
  */
 
+#include <vector>
 #include "EcoCityMoto.h"
 
 EcoCityMoto::EcoCityMoto(string direccionMotos, string direccionClientes, string direccionItinerario) :
@@ -116,16 +117,16 @@ void EcoCityMoto::guardarItinerarios(){
 Moto *EcoCityMoto::localizaMotoCercana(UTM ubicacion) {
     int posMejorMoto = 0;
     int distanciaMejor = INT_MAX;
-    for (int i = 0; i < motos.tam(); i++) {
-        if (motos.lee(i)->estaDisponible()) {
-            int distanciaActual = Utils::calcularDistancia(motos.lee(i)->getPosicion(), ubicacion);
+    for (int i = 0; i < motos.size(); i++) {
+        if (motos[i].estaDisponible()) {
+            int distanciaActual = Utils::calcularDistancia(motos[i].getPosicion(), ubicacion);
             if (distanciaActual < distanciaMejor) {
                 posMejorMoto = i;
                 distanciaMejor = distanciaActual;
             }
         }
     }
-    return motos.lee(posMejorMoto);
+    return &motos[posMejorMoto];
 }
 
 Cliente *EcoCityMoto::buscarCliente(string dni) {
@@ -219,4 +220,18 @@ void EcoCityMoto::crearItinerariosClientes() {
 
 void EcoCityMoto::mostrarAltura() {
     cout << "La altura del AVL es: " + to_string(clientes.alturaAVL()) << endl;
+}
+
+vector<Moto>* EcoCityMoto::localizaMotosSinBateria() {
+    vector<Moto> *motosSinBateria = new vector<Moto>;
+    for (int i = 0; i < motos.size(); ++i)
+        if (motos[i].getEstatus() == sinBateria)
+            motosSinBateria->push_back(motos[i]);
+    return motosSinBateria;
+
+}
+
+bool EcoCityMoto::nuevoCliente(Cliente *clienteNuevo) {
+    auto clienteInsertado = this->clientes.insert(pair<string, Cliente>(clienteNuevo->getDni(), *clienteNuevo) );
+    return  clienteInsertado.second;
 }

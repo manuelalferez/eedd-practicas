@@ -41,7 +41,7 @@ public:
     double calculaDistancia(Cliente &c);
     string getNombre() { return this->nombre; };
     string getDni() { return this->dni; };
-    void crearItinerarios();
+    void crearItinerarios(float porcentajeBateria);
     ListaDEnlazada<Itinerario> &getItinerarios() { return rutas; };
 
     string mostrar();
@@ -59,8 +59,6 @@ private:
     UTM posicion;
     ListaDEnlazada<Itinerario> rutas;
     EcoCityMoto *acceso;
-
-
     static UTM coordenada_max;
     static UTM coordenada_min;
 };

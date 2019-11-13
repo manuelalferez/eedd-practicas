@@ -13,6 +13,7 @@
 #include "Moto.h"
 #include "Utils.h"
 #include <fstream>
+#include <map>
 
 
 
@@ -30,14 +31,15 @@ public:
     void mostrarAltura();
     void cargarItinerariosClientes(string direccionItinerarios);
     void crearItinerariosClientes();
+    vector<Moto> *localizaMotosSinBateria();
     virtual ~EcoCityMoto();
-
     void guardarItinerarios();
+    bool nuevoCliente(Cliente *clienteNuevo);
 
 private:
     unsigned int idUltimo;
-    AVL<Cliente> clientes;
-    VDinamico<Moto> motos;
+    map<string, Cliente> clientes;
+    vector<Moto> motos;
 };
 
 

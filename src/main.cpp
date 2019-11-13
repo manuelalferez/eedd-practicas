@@ -46,38 +46,40 @@ void imprimirClientes(VDinamico<Cliente> _clientes, int _num_pos = UINT_MAX) {
 
 int main(int argc, char **argv) {
     cout << "Comienzo de lectura de un fichero" << endl;
-    string direccionArchivoClientes = calcularDireccion("/clientes_v2.csv");
-    string direccionArchivoMotos = calcularDireccion("/motos.txt");
+    string direccionArchivoClientes = calcularDireccion("../clientes_v2.csv");
+    string direccionArchivoMotos = calcularDireccion("../motos.txt");
 
 
     // Crear un árbol AVL con los clientes de la base de datos proporcionada en la práctica 1 (clientes_v2.csv).
     // La clave ahora es el dni.
     // Cargar las motos usando el fichero adjunto (motos.csv)
     EcoCityMoto empresaMotos(direccionArchivoMotos, direccionArchivoClientes);
-
-    // Mostrar el árbol AVL en inorden.
     empresaMotos.mostrarClientesInorden();
-
-    // Mostrar la altura del árbol AVL
     empresaMotos.mostrarAltura();
 
     // Buscar un cliente en el árbol dado su DNI
-    Cliente *cliente = empresaMotos.buscarCliente("88642870V");
-    if (cliente) {
-        cout << "Cliente encontrado, nombre: " + cliente->getNombre() << endl;
-    } else {
-        cout << "Cliente con DNI (67462104W) no encontrado." << endl;
-    }
 
+    Cliente cliente("53597523W", "5359", "Abdallah", "Lopera", 37.3, 38.4, &empresaMotos);
+    bool clienteExiste = empresaMotos.nuevoCliente(&cliente);
+    if (!clienteExiste){
+        cout << "Cliente con DNI " << cliente.getDni() << " insertado." << endl;
+        Moto *moto = cliente.buscarMotoCercana();
+        cliente.crearItinerarios(moto->getPorcentajeBateria());
+        cliente.desbloquearMoto(*moto);
+        cout <<
+
+    } else {
+        cout << "El cliente " << cliente.getDni() << " ya existe" << endl;
+    }
     // Simular que ese cliente quiere desplazarse, localiza la moto más cercana y hace un
     // trayecto con un final aleatorio dentro del rango (37, 3) - (38,4) correspondiente a la zona de Jaén.
     UTM min(37, 3);
     UTM max(38, 4);
     Moto *moto = cliente->buscarMotoCercana();
     cliente->desbloquearMoto(*moto);
-    cout << "Moto desbloqueada, " + cliente->getNombre() + " esta moviendose..." << endl;
+    cout << "Moto: " << moto->getId() <<  " desbloqueada, " + cliente->getNombre() + " esta moviendose..." << endl;
     cliente->terminarTrayecto(min, max);
-    cout << "Moto bloqueada" << endl;
+    cout << "Moto: " << moto->getId() <<  " bloqueada" << endl;
 
     return 0;
 } // main

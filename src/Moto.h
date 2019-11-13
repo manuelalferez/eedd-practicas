@@ -25,15 +25,22 @@ public:
     Moto(string _id, int _estatus, double _latitud, double _longitud);
     bool seActiva(Cliente &cli);
     virtual ~Moto();
-    void seDesactiva();
+    void seDesactiva(); //TODO update when it's deactivating
     UTM getPosicion() { return posicion; }
     bool estaDisponible();
     string getId() { return id; }
+    void actualizaBateria(int minutos);
+
+    float getPorcentajeBateria() const;
+
+    estados getEstatus() const;
+
 private:
     string id;
     UTM posicion;
     estados estatus;
     Cliente *cliente;
+    float porcentajeBateria;
 };
 
 #endif //EEDD_PR1_MOTO_H

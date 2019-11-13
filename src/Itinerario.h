@@ -17,7 +17,7 @@ class Moto;
 class Itinerario {
 public:
     Itinerario(int _id, double _latitud_ini, double _longitud_ini, double _latitud_fin,
-               double _longitud_fin, Fecha _fecha, int _minutos);
+               double _longitud_fin, Fecha _fecha, int _minutos, Moto* _vehiculo);
     int getId() { return id; }
     UTM getInicio() { return this->inicio; }
     void setFin(UTM posicionFinal) {
@@ -33,8 +33,7 @@ private:
     UTM fin;
     Fecha fecha;
     int minutos;
-
-    Moto *vehiculo{};
+    Moto *vehiculo;
 };
 
 
