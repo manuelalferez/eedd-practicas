@@ -8,7 +8,8 @@
 #ifndef EEDD_PR1_ECOCITYMOTO_H
 #define EEDD_PR1_ECOCITYMOTO_H
 
-#include "AVL.h"
+#include <map>
+#include <vector>
 #include "VDinamico.h"
 #include "Moto.h"
 #include "Utils.h"
@@ -31,13 +32,14 @@ public:
     void cargarItinerariosClientes(string direccionItinerarios);
     void crearItinerariosClientes();
     virtual ~EcoCityMoto();
-
+    bool nuevoCliente (Cliente &cliente);
+    bool eliminarCliente(string id);
     void guardarItinerarios();
 
 private:
     unsigned int idUltimo;
-    AVL<Cliente> clientes;
-    VDinamico<Moto> motos;
+    std::map<string, Cliente> clientes;
+    std::vector<Moto> motos;
 };
 
 

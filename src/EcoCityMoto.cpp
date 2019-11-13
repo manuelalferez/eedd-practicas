@@ -109,8 +109,23 @@ EcoCityMoto::~EcoCityMoto() {
     guardarItinerarios();
 }
 
-void EcoCityMoto::guardarItinerarios(){
-    //for(int)
+void EcoCityMoto::guardarItinerarios() {
+    auto itClientes = clientes.begin();
+    string paraImprimir;
+    while (itClientes != clientes.end()) {
+        auto itList = itClientes->second.getItinerarios().begin();
+        while (itList != itClientes->second.getItinerarios().end()) {
+            paraImprimir += itList->getToPrint();
+            paraImprimir = itClientes->second.getDni() + paraImprimir+"\n";
+            itList++;
+        }
+        itClientes++;
+    }
+    ofstream fs("itinerarios.txt");
+
+    // Enviamos una cadena al fichero de salida
+    fs << paraImprimir;
+    fs.close();
 }
 
 Moto *EcoCityMoto::localizaMotoCercana(UTM ubicacion) {
@@ -127,6 +142,20 @@ Moto *EcoCityMoto::localizaMotoCercana(UTM ubicacion) {
     }
     return motos.lee(posMejorMoto);
 }
+
+bool EcoCityMoto::nuevoCliente(Cliente &cliente) {
+
+}
+
+bool EcoCityMoto::eliminarCliente(string id) {
+    auto it = this->clientes.find(id);
+    if(it != clientes.end()) {
+        this->clientes.erase(it);
+        return true;
+    }
+    return false;
+}
+
 
 Cliente *EcoCityMoto::buscarCliente(string dni) {
     Cliente *cli = new Cliente();
@@ -199,8 +228,9 @@ void EcoCityMoto::cargarItinerariosClientes(string direccionItinerarios) {
                             camposFecha[posMinuto]);
 
                 Itinerario itinerario(stoi(camposLeidos[posId]), camposPosicionesUTM[posIniLat],
-                        camposPosicionesUTM[posIniLon], camposPosicionesUTM[posFinLat], camposPosicionesUTM[posFinLon],
-                        fecha, stoi(camposLeidos[posMinutosMov]));
+                                      camposPosicionesUTM[posIniLon], camposPosicionesUTM[posFinLat],
+                                      camposPosicionesUTM[posFinLon],
+                                      fecha, stoi(camposLeidos[posMinutosMov]));
                 Cliente cliente;
                 cliente.setDni(camposLeidos[posDni]);
                 this->clientes.busca(cliente)->addItinerario(itinerario);

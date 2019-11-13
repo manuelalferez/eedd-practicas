@@ -15,7 +15,7 @@
 #include <cfloat>
 #include <sstream>
 
-#include "ListaDEnlazada.h"
+#include <list>
 #include "fecha.h"
 #include "Itinerario.h"
 #include "EcoCityMoto.h"
@@ -42,7 +42,7 @@ public:
     string getNombre() { return this->nombre; };
     string getDni() { return this->dni; };
     void crearItinerarios();
-    ListaDEnlazada<Itinerario> &getItinerarios() { return rutas; };
+    std::list<Itinerario> &getItinerarios() { return rutas; };
 
     string mostrar();
     Moto *buscarMotoCercana();
@@ -57,7 +57,7 @@ private:
     string nombre;
     string direccion;
     UTM posicion;
-    ListaDEnlazada<Itinerario> rutas;
+    std::list<Itinerario> rutas;
     EcoCityMoto *acceso;
 
 
