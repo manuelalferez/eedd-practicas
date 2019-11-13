@@ -104,7 +104,7 @@ UTM Cliente::getUTM(UTM min, UTM max) {
 }
 
 Moto *Cliente::buscarMotoCercana() {
-    return this->acceso->localizaMotoCercana(this->posicion);
+    return this->acceso->localizaMotoCercana(this->posicion); //TODO
 }
 
 void Cliente::desbloquearMoto(Moto &moto) {
@@ -112,7 +112,7 @@ void Cliente::desbloquearMoto(Moto &moto) {
 }
 
 void Cliente::terminarTrayecto(UTM min, UTM max) {
-    auto ultimoItinerario = this->rutas.fin();
+    auto ultimoItinerario = this->rutas.fin(); //TODO
     ultimoItinerario.setFin(this->getUTM(min, max));
     desbloquearMoto(*ultimoItinerario.getVehiculo());
 }

@@ -62,7 +62,7 @@ int main(int argc, char **argv) {
     empresaMotos.mostrarAltura();
 
     // Buscar un cliente en el árbol dado su DNI
-    Cliente *cliente = empresaMotos.buscarCliente("67462104W");
+    Cliente *cliente = empresaMotos.buscarCliente("88642870V");
     if (cliente) {
         cout << "Cliente encontrado, nombre: " + cliente->getNombre() << endl;
     } else {

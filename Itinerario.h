@@ -20,15 +20,12 @@ public:
                                                                    inicio(_latitud_ini, _longitud_ini),
                                                                    fin(_latitud_fin, _longitud_fin),
                                                                    fecha(_fecha), minutos(_minutos) {}
-    int getMinutos() { return minutos; }
     int getId() { return id; }
     UTM getInicio() { return this->inicio; }
-    UTM getFin() { return this->fin; }
     void setFin(UTM posicionFinal) {
         fin.latitud = posicionFinal.latitud;
         fin.longitud = posicionFinal.longitud;
     };
-    Fecha getFecha() { return this->fecha; }
     Moto *getVehiculo() { return this->vehiculo; }
 private:
     int id;
@@ -38,7 +35,6 @@ private:
     int minutos;
 
     Moto *vehiculo;
-
 };
 
 
