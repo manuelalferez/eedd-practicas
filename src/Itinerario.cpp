@@ -8,10 +8,6 @@ Itinerario::Itinerario(int _id, double _latitud_ini, double _longitud_ini, doubl
                                                      fin(_latitud_fin, _longitud_fin),
                                                      fecha(_fecha), minutos(_minutos) {}
 string Itinerario::getToPrint() {
-    return to_string(this->id) + ";" + to_string(this->inicio.latitud) + ";" + to_string(this->inicio.longitud) +
-           ";" + to_string(this->fin.latitud) + ";" + to_string(this->fin.longitud) + ";" +
-           to_string(this->fecha.verAnio()) +
-           ";" + to_string(this->fecha.verMes()) + ";" + to_string(this->fecha.verDia()) +
-           ";" + to_string(this->fecha.verHora()) + ";" + to_string(this->fecha.verMin()) + ";" +
-           to_string(this->minutos);
+    return to_string(this->id) + ";" + to_string(this->inicio.latitud) + ";" + to_string(this->inicio.longitud) + ";" + to_string(this->fin.latitud) + ";"+
+    to_string(this->fin.longitud) + ";" + to_string(this->fecha.verAnio()) + ";" + to_string(this->fecha.verMes());
 }

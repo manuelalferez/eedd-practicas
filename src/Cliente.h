@@ -24,6 +24,7 @@ using namespace std;
 
 class Itinerario;
 class EcoCityMoto;
+class Itinerario;
 
 class Cliente {
 public:
