@@ -31,15 +31,16 @@ public:
     void mostrarAltura();
     void cargarItinerariosClientes(string direccionItinerarios);
     void crearItinerariosClientes();
+    vector<Moto> *localizaMotosSinBateria();
     virtual ~EcoCityMoto();
-    bool nuevoCliente (Cliente &cliente);
     bool eliminarCliente(string id);
     void guardarItinerarios();
+    bool nuevoCliente(Cliente *clienteNuevo);
 
 private:
     unsigned int idUltimo;
-    std::map<string, Cliente> clientes;
-    std::vector<Moto> motos;
+    map<string, Cliente> clientes;
+    vector<Moto> motos;
 };
 
 

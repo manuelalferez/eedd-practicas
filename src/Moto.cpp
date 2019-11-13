@@ -6,8 +6,11 @@
  */
 #include "Moto.h"
 
-Moto::Moto(string _id, int _estatus, double _latitud, double _longitud) : id(_id), posicion(_latitud, _longitud),
-                                                                          estatus((estados) _estatus), cliente(0) {}
+Moto::Moto(string _id, int _estatus, double _latitud, double _longitud) :
+    id(_id), posicion(_latitud, _longitud),
+    estatus((estados) _estatus), cliente(0),
+    porcentajeBateria(rand()%100+1)
+    {}
 Moto::~Moto() {}
 
 bool Moto::seActiva(Cliente &cli) {
@@ -23,4 +26,17 @@ void Moto::seDesactiva() {
 
 bool Moto::estaDisponible() {
     return estatus == bloqueada;
+}
+
+void Moto::actualizaBateria(int minutos) {
+    this->porcentajeBateria -= minutos;
+    if ( this->porcentajeBateria == 0 ) estatus = sinBateria;
+}
+
+estados Moto::getEstatus() const {
+    return estatus;
+}
+
+float Moto::getPorcentajeBateria() const {
+    return porcentajeBateria;
 }

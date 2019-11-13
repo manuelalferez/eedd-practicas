@@ -51,7 +51,7 @@ double Cliente::calculaDistancia(Cliente &c) {
     return Utils::calcularDistancia(this->posicion, c.posicion);
 }
 
-void Cliente::crearItinerarios() {
+void Cliente::crearItinerarios(float porcentajeBateria) {
     int num_itinerarios = 1 + rand() % (6 - 1);
     double latitud_random_ini, longitud_random_ini, latitud_random_fin, longitud_random_fin;
     unsigned minutos_aleatorios, dia, mes, anio = 2019, hora, minuto;
@@ -104,7 +104,10 @@ UTM Cliente::getUTM(UTM min, UTM max) {
 }
 
 Moto *Cliente::buscarMotoCercana() {
-    return this->acceso->localizaMotoCercana(this->posicion); //TODO
+    //TODO buscar moto con la batería suficiente
+    Moto *aUtilizar = this->acceso->localizaMotoCercana(this->posicion);
+    aUtilizar->seActiva(*this);
+    return aUtilizar;
 }
 
 void Cliente::desbloquearMoto(Moto &moto) {
@@ -112,7 +115,8 @@ void Cliente::desbloquearMoto(Moto &moto) {
 }
 
 void Cliente::terminarTrayecto(UTM min, UTM max) {
-    auto ultimoItinerario = this->rutas.fin(); //TODO
+    //TODO actualizar ultima posicion del Cliente, Itinerario y Moto
+    auto ultimoItinerario = this->rutas.fin();
     ultimoItinerario.setFin(this->getUTM(min, max));
     desbloquearMoto(*ultimoItinerario.getVehiculo());
 }
