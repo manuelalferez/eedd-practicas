@@ -12,7 +12,7 @@ EcoCityMoto::EcoCityMoto(string direccionMotos, string direccionClientes, string
         clientes(AVL<Cliente>()) {
     this->construirClientes(direccionClientes);
     this->construirMotos(direccionMotos);
-    if (direccionItinerarios) this->cargarItinerariosClientes();
+    if (!direccionItinerarios.empty()) this->cargarItinerariosClientes(direccionItinerarios);
     else this->crearItinerariosClientes();
 }
 
@@ -110,7 +110,7 @@ EcoCityMoto::~EcoCityMoto() {
 }
 
 void EcoCityMoto::guardarItinerarios(){
-    for(int)
+//    for(int)
 }
 
 Moto *EcoCityMoto::localizaMotoCercana(UTM ubicacion) {
