@@ -19,7 +19,7 @@ class Moto;
 class Cliente;
 class EcoCityMoto {
 public:
-    EcoCityMoto(string direccionMotos, string direccionClientes);
+    EcoCityMoto(string direccionMotos, string direccionClientes, string direccionItinerarios="");
     Moto* localizaMotoCercana(UTM ubicacion);
     void desbloquearMoto(Moto &moto);
     Cliente* buscarCliente(string dni);
@@ -27,7 +27,11 @@ public:
     void construirMotos(string nombreArchivoMotos);
     void mostrarClientesInorden();
     void mostrarAltura();
+    void cargarItinerariosClientes(string direccionItinerarios);
+    void crearItinerariosClientes();
     virtual ~EcoCityMoto();
+
+    void guardarItinerarios();
 
 private:
     unsigned int idUltimo;

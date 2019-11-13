@@ -11,15 +11,13 @@
 #include "fecha.h"
 #include "Moto.h"
 #include "Utils.h"
+#include <sstream>
 
 class Moto;
 class Itinerario {
 public:
     Itinerario(int _id, double _latitud_ini, double _longitud_ini, double _latitud_fin,
-               double _longitud_fin, Fecha _fecha, int _minutos) : id(_id),
-                                                                   inicio(_latitud_ini, _longitud_ini),
-                                                                   fin(_latitud_fin, _longitud_fin),
-                                                                   fecha(_fecha), minutos(_minutos) {}
+               double _longitud_fin, Fecha _fecha, int _minutos);
     int getId() { return id; }
     UTM getInicio() { return this->inicio; }
     void setFin(UTM posicionFinal) {
@@ -27,6 +25,8 @@ public:
         fin.longitud = posicionFinal.longitud;
     };
     Moto *getVehiculo() { return this->vehiculo; }
+
+    string getToPrint();
 private:
     int id;
     UTM inicio;
@@ -34,7 +34,7 @@ private:
     Fecha fecha;
     int minutos;
 
-    Moto *vehiculo;
+    Moto *vehiculo{};
 };
 
 

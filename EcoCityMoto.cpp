@@ -7,10 +7,13 @@
 
 #include "EcoCityMoto.h"
 
-EcoCityMoto::EcoCityMoto(string direccionMotos, string direccionClientes) : idUltimo(0), motos(VDinamico<Moto>()),
-                                                                            clientes(AVL<Cliente>()) {
+EcoCityMoto::EcoCityMoto(string direccionMotos, string direccionClientes, string direccionItinerarios) :
+        idUltimo(0), motos(VDinamico<Moto>()),
+        clientes(AVL<Cliente>()) {
     this->construirClientes(direccionClientes);
     this->construirMotos(direccionMotos);
+    if (direccionItinerarios) this->cargarItinerariosClientes();
+    else this->crearItinerariosClientes();
 }
 
 void EcoCityMoto::construirClientes(string direccionArchivoClientes) {
@@ -103,6 +106,11 @@ void EcoCityMoto::construirMotos(string direccionArchivoMotos) {
 }
 
 EcoCityMoto::~EcoCityMoto() {
+    guardarItinerarios();
+}
+
+void EcoCityMoto::guardarItinerarios(){
+    for(int)
 }
 
 Moto *EcoCityMoto::localizaMotoCercana(UTM ubicacion) {
@@ -138,6 +146,75 @@ void EcoCityMoto::desbloquearMoto(Moto &moto) {
 
 void EcoCityMoto::mostrarClientesInorden() {
     clientes.recorreInorden();
+}
+
+void EcoCityMoto::cargarItinerariosClientes(string direccionItinerarios) {
+    ifstream fe;
+    string linea;
+    int total = 0;
+    enum PosicionesCamposEntrada {
+        posDni, posId, posIniLat, posIniLon, posFinLat, posFinLon, posAnio,
+        posMes, posDia, posHora, posMinuto, posMinutosMov
+    };
+    int numCampos = 12, numPosicionesUTM = 4, numCamposFecha = 5;
+    // dni, id, inicioLat, inicioLon, finLat, finLon, anio, mes, dia, hora, minuto, minutos
+    auto *camposLeidos = new string[numCampos];
+    // inicioLat, inicioLon, finLat, finLon
+    auto *camposPosicionesUTM = new double[numPosicionesUTM];
+    //anio, mes, dia, hora, minuto
+    int *camposFecha = new int[numCamposFecha];
+
+    //Asociamos el flujo al fichero
+    fe.open(direccionItinerarios);
+
+    if (fe.good()) {
+        //Mientras no se haya llegado al final del fichero
+        while (!fe.eof()) {
+            getline(fe, linea);
+            stringstream ss;        //Stream que trabaja sobre buffer interno
+
+            if (!linea.empty()) {
+                ++total;
+            }
+            if (total > 1) {
+                ss << linea;
+                //El carácter ; se lee y se elimina de ss
+                for (int i = 0; i < numCampos; i++) {
+                    getline(ss, camposLeidos[i], ';');
+                }
+                int i = 2, j = 0;
+                while (j < numPosicionesUTM) {
+                    camposPosicionesUTM[j] = stold(camposLeidos[i]);
+                    i++;
+                    j++;
+                }
+                i = 6;
+                j = 0;
+                while (j < numCamposFecha) {
+                    camposFecha[j] = stoi(camposLeidos[i]);
+                    i++;
+                    j++;
+                }
+                Fecha fecha(camposFecha[posDia], camposFecha[posMes], camposFecha[posAnio], camposFecha[posHora],
+                            camposFecha[posMinuto]);
+
+                Itinerario itinerario(stoi(camposLeidos[posId]), camposPosicionesUTM[posIniLat],
+                        camposPosicionesUTM[posIniLon], camposPosicionesUTM[posFinLat], camposPosicionesUTM[posFinLon],
+                        fecha, stoi(camposLeidos[posMinutosMov]));
+                Cliente cliente;
+                cliente.setDni(camposLeidos[posDni]);
+                this->clientes.busca(cliente)->addItinerario(itinerario);
+            } //if
+        } //while
+        cout << "Total de clientes en el fichero: " << total - 1 << endl;
+        fe.close();
+    } else {
+        cerr << "No se puede abrir el fichero" << endl;
+    }
+}
+
+void EcoCityMoto::crearItinerariosClientes() {
+
 }
 
 void EcoCityMoto::mostrarAltura() {

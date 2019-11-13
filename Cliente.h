@@ -47,6 +47,8 @@ public:
     void desbloquearMoto(Moto &moto);
     void terminarTrayecto(UTM min, UTM max);
     UTM getUTM(UTM min, UTM max);
+
+    void addItinerario(Itinerario itinerario);
 private:
     string dni;
     string pass;
