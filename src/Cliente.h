@@ -9,9 +9,9 @@
 #define EEDD_PR1_CLIENTE_H
 
 #include <iostream>
-#include <math.h>
+#include <cmath>
 #include <string>
-#include<stdlib.h>
+#include<cstdlib>
 #include <cfloat>
 #include <sstream>
 
@@ -22,6 +22,7 @@
 
 using namespace std;
 
+class Itinerario;
 class EcoCityMoto;
 
 class Cliente {

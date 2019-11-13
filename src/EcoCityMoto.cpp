@@ -7,12 +7,12 @@
 
 #include "EcoCityMoto.h"
 
-EcoCityMoto::EcoCityMoto(string direccionMotos, string direccionClientes, string direccionItinerarios) :
+EcoCityMoto::EcoCityMoto(string direccionMotos, string direccionClientes, string direccionItinerario) :
         idUltimo(0), motos(VDinamico<Moto>()),
         clientes(AVL<Cliente>()) {
     this->construirClientes(direccionClientes);
     this->construirMotos(direccionMotos);
-    if (direccionItinerarios) this->cargarItinerariosClientes();
+    if (!direccionItinerario.empty()) this->cargarItinerariosClientes(direccionItinerario);
     else this->crearItinerariosClientes();
 }
 
@@ -110,7 +110,7 @@ EcoCityMoto::~EcoCityMoto() {
 }
 
 void EcoCityMoto::guardarItinerarios(){
-    for(int)
+    //for(int)
 }
 
 Moto *EcoCityMoto::localizaMotoCercana(UTM ubicacion) {
