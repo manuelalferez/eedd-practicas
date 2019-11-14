@@ -34,7 +34,7 @@ public:
 
 private:
     unsigned int idUltimo;
-    map<string, Cliente> clientes;
+    map<string, Cliente*> clientes;
     vector<Moto> motos;
 };
 
