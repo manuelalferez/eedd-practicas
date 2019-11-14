@@ -8,7 +8,7 @@
 #ifndef EEDD_PR1_UTILS_H
 #define EEDD_PR1_UTILS_H
 
-#include <math.h>
+#include <cmath>
 
 // Coordenadas UTM formadas por latitud y longitud
 
@@ -17,6 +17,11 @@ struct UTM {
     double longitud;
     UTM() : latitud(0), longitud(0) {}
     UTM(double _lat, double _long) : latitud(_lat), longitud(_long) {}
+    UTM& operator=(UTM copia){
+        this->latitud=copia.latitud;
+        this->longitud=copia.longitud;
+        return *this;
+    }
 };
 namespace Utils {
     int calcularDistancia(UTM inicio, UTM fin);

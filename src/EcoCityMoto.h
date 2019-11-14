@@ -10,12 +10,9 @@
 
 #include <map>
 #include <vector>
-#include "VDinamico.h"
 #include "Moto.h"
 #include "Utils.h"
 #include <fstream>
-
-
 
 class Moto;
 class Cliente;
@@ -27,11 +24,9 @@ public:
     Cliente* buscarCliente(string dni);
     void construirClientes(string nombreArchivoClientes);
     void construirMotos(string nombreArchivoMotos);
-    void mostrarClientesInorden();
-    void mostrarAltura();
     void cargarItinerariosClientes(string direccionItinerarios);
     void crearItinerariosClientes();
-    vector<Moto> *localizaMotosSinBateria();
+    vector<Moto> localizaMotosSinBateria();
     virtual ~EcoCityMoto();
     bool eliminarCliente(string id);
     void guardarItinerarios();

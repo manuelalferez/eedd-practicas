@@ -30,9 +30,7 @@ public:
     bool estaDisponible();
     string getId() { return id; }
     void actualizaBateria(int minutos);
-
     float getPorcentajeBateria() const;
-
     estados getEstatus() const;
 
 private:

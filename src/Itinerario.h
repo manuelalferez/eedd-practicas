@@ -14,18 +14,20 @@
 #include <sstream>
 
 class Moto;
+
 class Itinerario {
 public:
     Itinerario(int _id, double _latitud_ini, double _longitud_ini, double _latitud_fin,
-               double _longitud_fin, Fecha _fecha, int _minutos, Moto* _vehiculo);
+               double _longitud_fin, Fecha _fecha, int _minutos, Moto *_vehiculo);
     int getId() { return id; }
     UTM getInicio() { return this->inicio; }
     void setFin(UTM posicionFinal) {
         fin.latitud = posicionFinal.latitud;
         fin.longitud = posicionFinal.longitud;
     };
+    void setMinutos(int minutos) { this->minutos = minutos; }
     Moto *getVehiculo() { return this->vehiculo; }
-
+    int getMinutos() { return minutos; }
     string getToPrint();
 private:
     int id;

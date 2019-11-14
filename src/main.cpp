@@ -13,8 +13,8 @@
 
 #define NUM_MOSTRAR 5
 
-#include "VDinamico.h"
 #include "EcoCityMoto.h"
+
 class Moto;
 
 /**
@@ -33,13 +33,13 @@ string calcularDireccion(string nombreArchivo) {
     return direccion;
 } // calcularDireccion()
 
-void imprimirClientes(VDinamico<Cliente> _clientes, int _num_pos = UINT_MAX) {
-    if (_num_pos == UINT_MAX) _num_pos = _clientes.tam();
-    if (_num_pos < 0 || _num_pos > _clientes.tam()) {
+void imprimirClientes(vector<Cliente> _clientes, int _num_pos = UINT_MAX) {
+    if (_num_pos == UINT_MAX) _num_pos = _clientes.size();
+    if (_num_pos < 0 || _num_pos > _clientes.size()) {
         throw out_of_range("[main:imprimirClientes]: Posición fuera de rango");
     } else {
         for (int i = 0; i < _num_pos; i++) {
-            cout << _clientes.lee(i)->imprimir() << endl;
+            cout << _clientes[i].imprimir() << endl;
         }
     }
 } //imprimirClientes()
@@ -48,38 +48,49 @@ int main(int argc, char **argv) {
     cout << "Comienzo de lectura de un fichero" << endl;
     string direccionArchivoClientes = calcularDireccion("../clientes_v2.csv");
     string direccionArchivoMotos = calcularDireccion("../motos.txt");
+    string direccionArchivoItinerarios = calcularDireccion("../itinerarios.txt");
+
+    std::ifstream archivoItinerarios(direccionArchivoItinerarios);
+    if ( archivoItinerarios.peek() == std::ifstream::traits_type::eof() ){
+        // Empty File
+        direccionArchivoItinerarios = "";
+    }
 
 
-    // Crear un árbol AVL con los clientes de la base de datos proporcionada en la práctica 1 (clientes_v2.csv).
-    // La clave ahora es el dni.
-    // Cargar las motos usando el fichero adjunto (motos.csv)
-    EcoCityMoto empresaMotos(direccionArchivoMotos, direccionArchivoClientes);
-    empresaMotos.mostrarClientesInorden();
-    empresaMotos.mostrarAltura();
-
-    // Buscar un cliente en el árbol dado su DNI
-
+    EcoCityMoto empresaMotos(direccionArchivoMotos, direccionArchivoClientes, direccionArchivoItinerarios);
+    //1. Añadir a la empresa un nuevo cliente que no exista previamente con coordenadas en Jaén, rango ​(37, 3) - (38, 4)​.
     Cliente cliente("53597523W", "5359", "Abdallah", "Lopera", 37.3, 38.4, &empresaMotos);
     bool clienteExiste = empresaMotos.nuevoCliente(&cliente);
-    if (!clienteExiste){
+    //2. Localizar el cliente anterior en la empresa por su DNI y buscar una moto cercana que se pueda utilizar.
+    //3. Realizar un itinerario con la moto localizada con una duración válida para la carga de batería de la moto. Al dejarla el cliente debe comprobar la carga de la moto para poner adecuadamente el estado.
+
+    if (!clienteExiste) {
         cout << "Cliente con DNI " << cliente.getDni() << " insertado." << endl;
         Moto *moto = cliente.buscarMotoCercana();
-        cliente.crearItinerarios(moto->getPorcentajeBateria());
+        cliente.agregarItinerario(moto->getPosicion());
         cliente.desbloquearMoto(*moto);
-        cout <<
-
+        UTM min(37, 3);
+        UTM max(38, 4);
+        cliente.terminarTrayecto(min,max);
+        cout << "Cliente con DNI " << cliente.getDni() << " ha terminado su trayecto." << endl;
+        cout << "Minutos en circulación: " << cliente.getItinerarios().begin()->getMinutos() << endl;
+        cout << "Batería de la moto id(" << cliente.getItinerarios().begin()->getVehiculo()->getId() << "): "
+             << cliente.getItinerarios().begin()->getVehiculo()->getPorcentajeBateria() << endl;
     } else {
         cout << "El cliente " << cliente.getDni() << " ya existe" << endl;
     }
-    // Simular que ese cliente quiere desplazarse, localiza la moto más cercana y hace un
-    // trayecto con un final aleatorio dentro del rango (37, 3) - (38,4) correspondiente a la zona de Jaén.
-    UTM min(37, 3);
-    UTM max(38, 4);
-    Moto *moto = cliente->buscarMotoCercana();
-    cliente->desbloquearMoto(*moto);
-    cout << "Moto: " << moto->getId() <<  " desbloqueada, " + cliente->getNombre() + " esta moviendose..." << endl;
-    cliente->terminarTrayecto(min, max);
-    cout << "Moto: " << moto->getId() <<  " bloqueada" << endl;
+
+    //4. Localizar las motos sin batería e indicar si la moto utilizada está en esa situación.
+    auto motosSinBateria = empresaMotos.localizaMotosSinBateria();
+    for (int i = 0; i < motosSinBateria.size(); i++)
+        cout << "Moto id(" << motosSinBateria[i].getId() << "), está sin batería." << endl;
+    //5. Borrar el cliente que se insertó en el punto 1 y comprobar que efectivamente ya no existe.
+    empresaMotos.eliminarCliente(cliente.getDni());
+    cout << "Cliente eliminado" << endl;
+
+    auto estaCliente = empresaMotos.buscarCliente(cliente.getDni());
+    if (!estaCliente)
+        cout << "Cliente no está en la empresa" << endl;
 
     return 0;
 } // main

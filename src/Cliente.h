@@ -14,11 +14,10 @@
 #include<cstdlib>
 #include <cfloat>
 #include <sstream>
-
-#include "ListaDEnlazada.h"
 #include "fecha.h"
 #include "Itinerario.h"
 #include "EcoCityMoto.h"
+#include <list>
 
 using namespace std;
 
@@ -41,13 +40,15 @@ public:
     double calculaDistancia(Cliente &c);
     string getNombre() { return this->nombre; };
     string getDni() { return this->dni; };
-    void crearItinerarios(float porcentajeBateria);
-    ListaDEnlazada<Itinerario> &getItinerarios() { return rutas; };
+    void crearItinerarios();
+    void agregarItinerario(UTM inicio);
+    list<Itinerario> &getItinerarios() { return rutas; };
 
     string mostrar();
     Moto *buscarMotoCercana();
     void desbloquearMoto(Moto &moto);
     void terminarTrayecto(UTM min, UTM max);
+    int simularMovimiento();
     UTM getUTM(UTM min, UTM max);
 
     void addItinerario(Itinerario itinerario);

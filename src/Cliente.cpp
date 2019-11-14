@@ -51,12 +51,12 @@ double Cliente::calculaDistancia(Cliente &c) {
     return Utils::calcularDistancia(this->posicion, c.posicion);
 }
 
-void Cliente::crearItinerarios(float porcentajeBateria) {
+void Cliente::crearItinerarios() {
     int num_itinerarios = 1 + rand() % (6 - 1);
     double latitud_random_ini, longitud_random_ini, latitud_random_fin, longitud_random_fin;
-    unsigned minutos_aleatorios, dia, mes, anio = 2019, hora, minuto;
+    int minutos_aleatorios, dia = 0, mes, anio = 2019, hora, minuto;
     Fecha fecha;
-    while (rutas.tam() != num_itinerarios) {
+    while (rutas.size() != num_itinerarios) {
         latitud_random_ini = (coordenada_max.latitud - coordenada_min.latitud) *
                              ((double) rand() / (double) RAND_MAX) + coordenada_min.latitud;
         longitud_random_ini = (coordenada_max.longitud - coordenada_min.longitud)
@@ -85,15 +85,55 @@ void Cliente::crearItinerarios(float porcentajeBateria) {
             case 9:
             case 11:
                 dia = 1 + rand() % (31 - 1); // Meses con 30 días
+                break;
             case 2:
                 dia = 1 + rand() % (29 - 1); // Meses con 28 días
+                break;
         }
         fecha.asignarDia(dia, mes, anio);
         fecha.asignarHora(hora, minuto);
-        Itinerario nuevo_itinerario(rutas.tam(), latitud_random_ini, longitud_random_ini, latitud_random_fin,
-                                    longitud_random_fin, fecha, minutos_aleatorios);
-        this->rutas.insertaInicio(nuevo_itinerario);
+        Itinerario nuevoItinerario(rutas.size(), latitud_random_ini, longitud_random_ini, latitud_random_fin,
+                                   longitud_random_fin, fecha, minutos_aleatorios, 0);
+        this->rutas.insert(this->rutas.begin(), nuevoItinerario);
     }
+}
+
+void Cliente::agregarItinerario(UTM inicio) {
+    double latitud_random_ini, longitud_random_ini;
+    unsigned dia = 0, mes, anio = 2019, hora, minuto;
+    Fecha fecha;
+    latitud_random_ini = (coordenada_max.latitud - coordenada_min.latitud) *
+                         ((double) rand() / (double) RAND_MAX) + coordenada_min.latitud;
+    longitud_random_ini = (coordenada_max.longitud - coordenada_min.longitud)
+                          * ((double) rand() / (double) RAND_MAX) + coordenada_min.longitud;
+    mes = 1 + rand() % (13 - 1);
+    hora = rand() % 24;
+    minuto = 0 + rand() % 60;
+    switch (mes) {
+        case 1:
+        case 3:
+        case 5:
+        case 7:
+        case 8:
+        case 10:
+        case 12:
+            dia = 1 + rand() % (32 - 1); //Meses con 31 días
+            break;
+        case 4:
+        case 6:
+        case 9:
+        case 11:
+            dia = 1 + rand() % (31 - 1); // Meses con 30 días
+            break;
+        case 2:
+            dia = 1 + rand() % (29 - 1); // Meses con 28 días
+            break;
+    }
+    fecha.asignarDia(dia, mes, anio);
+    fecha.asignarHora(hora, minuto);
+    Itinerario nuevoItinerario(rutas.size(), latitud_random_ini, longitud_random_ini, 0,
+                               0, fecha, 0, 0);
+    this->rutas.insert(this->rutas.begin(), nuevoItinerario);
 }
 
 UTM Cliente::getUTM(UTM min, UTM max) {
@@ -104,7 +144,6 @@ UTM Cliente::getUTM(UTM min, UTM max) {
 }
 
 Moto *Cliente::buscarMotoCercana() {
-    //TODO buscar moto con la batería suficiente
     Moto *aUtilizar = this->acceso->localizaMotoCercana(this->posicion);
     aUtilizar->seActiva(*this);
     return aUtilizar;
@@ -115,10 +154,19 @@ void Cliente::desbloquearMoto(Moto &moto) {
 }
 
 void Cliente::terminarTrayecto(UTM min, UTM max) {
-    //TODO actualizar ultima posicion del Cliente, Itinerario y Moto
-    auto ultimoItinerario = this->rutas.fin();
-    ultimoItinerario.setFin(this->getUTM(min, max));
-    desbloquearMoto(*ultimoItinerario.getVehiculo());
+    auto ultimoItinerario = this->rutas.begin();
+    UTM posicionFinal = this->getUTM(min, max);
+    ultimoItinerario->setFin(posicionFinal);
+    this->posicion = posicionFinal;
+    desbloquearMoto(*ultimoItinerario->getVehiculo());
+    simularMovimiento();
+    ultimoItinerario->getVehiculo()->actualizaBateria(ultimoItinerario->getMinutos());
+}
+
+int Cliente::simularMovimiento() {
+    auto ultimoItinerario = this->rutas.begin();
+    int minutos = 1 + rand() % (int)(ultimoItinerario->getVehiculo()->getPorcentajeBateria() - 1);
+    ultimoItinerario->setMinutos(minutos);
 }
 
 string Cliente::mostrar() {
