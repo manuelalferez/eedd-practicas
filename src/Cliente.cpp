@@ -155,6 +155,7 @@ void Cliente::terminarTrayecto(UTM min, UTM max) {
     UTM posicionFinal = this->getUTM(min, max);
     ultimoItinerario->setFin(posicionFinal);
     this->posicion = posicionFinal;
+    ultimoItinerario->getVehiculo()->setPosicion(posicionFinal);
     desbloquearMoto(*ultimoItinerario->getVehiculo());
     simularMovimiento();
     ultimoItinerario->getVehiculo()->actualizaBateria(ultimoItinerario->getMinutos());

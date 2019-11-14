@@ -238,10 +238,10 @@ void EcoCityMoto::cargarItinerariosClientes(string direccionItinerarios) {
                 if ( camposLeidos[posDni].empty() ) continue;
                 this->clientes.find(camposLeidos[posDni])->second->addItinerario(itinerario);
         } //while
-        cout << "Total de clientes en el fichero: " << total - 1 << endl;
+        cout << "Total de itinerarios en el fichero: " << total - 1 << endl;
         fe.close();
     } else {
-        cerr << "No se puede abrir el fichero" << endl;
+        cerr << "No se puede abrir el fichero itinerarios" << endl;
     }
 }
 

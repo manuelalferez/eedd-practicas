@@ -32,6 +32,7 @@ public:
     void actualizaBateria(int minutos);
     float getPorcentajeBateria() const;
     estados getEstatus() const;
+    void setPosicion(UTM posicion) { this->posicion = posicion; }
 
 private:
     string id;
