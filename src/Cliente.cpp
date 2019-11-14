@@ -92,20 +92,17 @@ void Cliente::crearItinerarios() {
         }
         fecha.asignarDia(dia, mes, anio);
         fecha.asignarHora(hora, minuto);
+        Moto* nuevaMoto =nullptr ;
         Itinerario nuevoItinerario(rutas.size(), latitud_random_ini, longitud_random_ini, latitud_random_fin,
-                                   longitud_random_fin, fecha, minutos_aleatorios, 0);
+                                   longitud_random_fin, fecha, minutos_aleatorios, nuevaMoto);
         this->rutas.insert(this->rutas.begin(), nuevoItinerario);
     }
 }
 
-void Cliente::agregarItinerario(UTM inicio) {
+void Cliente::agregarItinerario(UTM inicio, Moto *moto) {
     double latitud_random_ini, longitud_random_ini;
     unsigned dia = 0, mes, anio = 2019, hora, minuto;
     Fecha fecha;
-    latitud_random_ini = (coordenada_max.latitud - coordenada_min.latitud) *
-                         ((double) rand() / (double) RAND_MAX) + coordenada_min.latitud;
-    longitud_random_ini = (coordenada_max.longitud - coordenada_min.longitud)
-                          * ((double) rand() / (double) RAND_MAX) + coordenada_min.longitud;
     mes = 1 + rand() % (13 - 1);
     hora = rand() % 24;
     minuto = 0 + rand() % 60;
@@ -131,8 +128,8 @@ void Cliente::agregarItinerario(UTM inicio) {
     }
     fecha.asignarDia(dia, mes, anio);
     fecha.asignarHora(hora, minuto);
-    Itinerario nuevoItinerario(rutas.size(), latitud_random_ini, longitud_random_ini, 0,
-                               0, fecha, 0, 0);
+    Itinerario nuevoItinerario(rutas.size(), inicio.latitud, inicio.longitud, 0,
+                               0, fecha, 0, moto);
     this->rutas.insert(this->rutas.begin(), nuevoItinerario);
 }
 
@@ -171,4 +168,8 @@ int Cliente::simularMovimiento() {
 
 string Cliente::mostrar() {
     return "Nombre: " + this->nombre + ", DNI:  " + this->dni;
+}
+
+void Cliente::addItinerario(Itinerario &itinerario) {
+    this->rutas.insert(this->rutas.begin(),itinerario);
 }

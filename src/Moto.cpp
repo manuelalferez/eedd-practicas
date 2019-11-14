@@ -29,8 +29,10 @@ bool Moto::estaDisponible() {
 }
 
 void Moto::actualizaBateria(int minutos) {
-    this->porcentajeBateria -= minutos;
-    if ( this->porcentajeBateria <= 15 ) estatus = sinBateria;
+    if(this){
+        this->porcentajeBateria -= minutos;
+        if ( this->porcentajeBateria <= 15 ) estatus = sinBateria;
+    }
 }
 
 estados Moto::getEstatus() const {

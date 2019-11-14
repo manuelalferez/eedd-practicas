@@ -239,6 +239,7 @@ void EcoCityMoto::crearItinerariosClientes() {
     auto it = this->clientes.begin();
     while (it != clientes.end()) {
         it->second.crearItinerarios();
+        it++;
     }
 }
 

@@ -41,7 +41,7 @@ public:
     string getNombre() { return this->nombre; };
     string getDni() { return this->dni; };
     void crearItinerarios();
-    void agregarItinerario(UTM inicio);
+    void agregarItinerario(UTM inicio, Moto *moto);
     list<Itinerario> &getItinerarios() { return rutas; };
 
     string mostrar();
@@ -51,7 +51,7 @@ public:
     int simularMovimiento();
     UTM getUTM(UTM min, UTM max);
 
-    void addItinerario(Itinerario itinerario);
+    void addItinerario(Itinerario& itinerario);
 private:
     string dni;
     string pass;
