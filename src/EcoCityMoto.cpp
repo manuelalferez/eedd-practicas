@@ -228,8 +228,8 @@ void EcoCityMoto::cargarItinerariosClientes(string direccionItinerarios) {
                     i++;
                     j++;
                 }
-                Fecha fecha(camposFecha[posDia], camposFecha[posMes], camposFecha[posAnio], camposFecha[posHora],
-                            camposFecha[posMinuto]);
+                Fecha fecha(camposFecha[2], camposFecha[1], camposFecha[0], camposFecha[3],
+                            camposFecha[4]);
 
                 Itinerario itinerario(stoi(camposLeidos[posId], nullptr, 10), camposPosicionesUTM[posIniLat],
                                       camposPosicionesUTM[posIniLon], camposPosicionesUTM[posFinLat],
