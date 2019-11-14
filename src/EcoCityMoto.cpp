@@ -190,11 +190,11 @@ void EcoCityMoto::cargarItinerariosClientes(string direccionItinerarios) {
     };
     int numCampos = 12, numPosicionesUTM = 4, numCamposFecha = 5;
     // dni, id, inicioLat, inicioLon, finLat, finLon, anio, mes, dia, hora, minuto, minutos
-    auto *camposLeidos = new string[numCampos];
+    string camposLeidos[numCampos];
     // inicioLat, inicioLon, finLat, finLon
-    auto *camposPosicionesUTM = new double[numPosicionesUTM];
+    double camposPosicionesUTM[numPosicionesUTM];
     //anio, mes, dia, hora, minuto
-    int *camposFecha = new int[numCamposFecha];
+    int camposFecha[numCamposFecha];
 
     //Asociamos el flujo al fichero
     fe.open(direccionItinerarios);
@@ -235,9 +235,8 @@ void EcoCityMoto::cargarItinerariosClientes(string direccionItinerarios) {
                                       camposPosicionesUTM[posIniLon], camposPosicionesUTM[posFinLat],
                                       camposPosicionesUTM[posFinLon],
                                       fecha, stoi(camposLeidos[posMinutosMov],nullptr, 10), nullptr);
-                Cliente cliente;
-                cliente.setDni(camposLeidos[posDni]);
-                this->clientes.find(cliente.getDni())->second->addItinerario(itinerario);
+                if ( camposLeidos[posDni].empty() ) continue;
+                this->clientes.find(camposLeidos[posDni])->second->addItinerario(itinerario);
         } //while
         cout << "Total de clientes en el fichero: " << total - 1 << endl;
         fe.close();
