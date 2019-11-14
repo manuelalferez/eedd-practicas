@@ -10,6 +10,7 @@
 #include <string>
 #include <fstream>
 #include <sstream>
+#include <climits>
 
 #define NUM_MOSTRAR 5
 

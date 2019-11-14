@@ -6,6 +6,8 @@
  */
 
 #include <vector>
+#include <algorithm>
+#include <climits>
 #include "EcoCityMoto.h"
 
 EcoCityMoto::EcoCityMoto(string direccionMotos, string direccionClientes, string direccionItinerario) :
