@@ -113,17 +113,19 @@ EcoCityMoto::~EcoCityMoto() {
 
 void EcoCityMoto::guardarItinerarios() {
     auto itClientes = clientes.begin();
-    string paraImprimir;
+    string paraImprimir, lineaImprimir;
     while (itClientes != clientes.end()) {
         auto itList = itClientes->second.getItinerarios().begin();
         while (itList != itClientes->second.getItinerarios().end()) {
-            paraImprimir += itList->getToPrint();
-            paraImprimir = itClientes->second.getDni() + paraImprimir + "\n";
+            lineaImprimir += itList->getToPrint();
+            lineaImprimir = itClientes->second.getDni()+";" + lineaImprimir + "\n";
+            paraImprimir+=lineaImprimir;
+            lineaImprimir="";
             itList++;
         }
         itClientes++;
     }
-    ofstream fs("itinerarios.txt");
+    ofstream fs("../itinerarios.txt");
 
     // Enviamos una cadena al fichero de salida
     fs << paraImprimir;
@@ -222,7 +224,7 @@ void EcoCityMoto::cargarItinerariosClientes(string direccionItinerarios) {
                 Itinerario itinerario(stoi(camposLeidos[posId]), camposPosicionesUTM[posIniLat],
                                       camposPosicionesUTM[posIniLon], camposPosicionesUTM[posFinLat],
                                       camposPosicionesUTM[posFinLon],
-                                      fecha, stoi(camposLeidos[posMinutosMov]),0);
+                                      fecha, stoi(camposLeidos[posMinutosMov]), nullptr);
                 Cliente cliente;
                 cliente.setDni(camposLeidos[posDni]);
                 this->clientes.find(cliente.getDni())->second.addItinerario(itinerario);
