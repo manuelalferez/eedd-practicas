@@ -208,11 +208,12 @@ void EcoCityMoto::cargarItinerariosClientes(string direccionItinerarios) {
             if (!linea.empty()) {
                 ++total;
             }
-            if (total > 1) {
                 ss << linea;
+                string camLei;
                 //El carácter ; se lee y se elimina de ss
                 for (int i = 0; i < numCampos; i++) {
                     getline(ss, camposLeidos[i], ';');
+                    camLei+=camposLeidos[i];
                 }
                 int i = 2, j = 0;
                 while (j < numPosicionesUTM) {
@@ -237,7 +238,6 @@ void EcoCityMoto::cargarItinerariosClientes(string direccionItinerarios) {
                 Cliente cliente;
                 cliente.setDni(camposLeidos[posDni]);
                 this->clientes.find(cliente.getDni())->second->addItinerario(itinerario);
-            } //if
         } //while
         cout << "Total de clientes en el fichero: " << total - 1 << endl;
         fe.close();
