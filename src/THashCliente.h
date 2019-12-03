@@ -7,11 +7,10 @@
 
 #include <string>
 #include "Cliente.h"
-#include <cmath>
 
 class THashCliente {
 public:
-    THashCliente(int tamTabla);
+    THashCliente(int tamTabla, string tipoInsercion);
     virtual ~THashCliente();
     bool insertar(unsigned long clave, string &dni, Cliente &cli);
     bool buscar(unsigned long clave, string &dni, Cliente &*cli);
@@ -20,6 +19,8 @@ public:
 
 private:
     void hash(unsigned long clave, int intento);
+    unsigned int dispersonDoble(string dni, unsigned int hash, int intentos);
+
     unsigned int djb2(string *str);
     int dispersionCuadratica(int hash, int intentos, Cliente *dato);
     int dispersionDoble(int hast, int intentos);
@@ -27,6 +28,11 @@ private:
     unsigned int _tamTabla;
     unsigned int _numClientes;
     vector<Cliente *> *_tabla;
+    unsigned int _maxColisiones;
+    unsigned int _colisiones;
+    unsigned int _numInserciones;
+    const string _tipoDispersion;
+    vector<Cliente*> *_tabla;
 };
 
 
