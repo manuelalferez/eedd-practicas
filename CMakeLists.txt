@@ -10,4 +10,4 @@ add_executable(eedd_pr1
         src/fecha.h src/fecha.cpp
         src/EcoCityMoto.cpp src/EcoCityMoto.h
         src/Moto.h src/Moto.cpp
-        src/Utils.h src/Utils.cpp)
+        src/Utils.h src/Utils.cpp src/THashCliente.cpp src/THashCliente.h)
