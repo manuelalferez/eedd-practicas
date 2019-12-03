@@ -23,3 +23,7 @@ bool THashCliente::insertar(unsigned long clave, string &dni, Cliente &cli) {
 unsigned int THashCliente::numClientes() {
 
 }
+
+THashCliente::~THashCliente() {
+
+}

@@ -11,6 +11,7 @@
 class THashCliente {
 public:
     THashCliente(int tamTabla);
+    virtual ~THashCliente();
     bool insertar(unsigned long clave, string &dni, Cliente &cli);
     bool buscar(unsigned long clave, string &dni, Cliente &*cli);
     bool borrar(unsigned long clave, string &dni);
@@ -18,6 +19,10 @@ public:
 
 private:
     void hash(unsigned long clave, int intento);
+
+private:
+    unsigned int _tamTabla;
+    unsigned int _numClientes;
 };
 
 
