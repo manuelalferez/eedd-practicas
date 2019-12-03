@@ -7,6 +7,7 @@
 
 #include <string>
 #include "Cliente.h"
+#include <cmath>
 
 class THashCliente {
 public:
@@ -19,10 +20,13 @@ public:
 
 private:
     void hash(unsigned long clave, int intento);
-
+    unsigned int djb2(string *str);
+    int dispersionCuadratica(int hash, int intentos, Cliente *dato);
+    int dispersionDoble(int hast, int intentos);
 private:
     unsigned int _tamTabla;
     unsigned int _numClientes;
+    vector<Cliente *> *_tabla;
 };
 
 
