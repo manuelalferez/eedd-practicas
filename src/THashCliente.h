@@ -22,7 +22,7 @@ private:
     unsigned int dispersonDoble(const string dni, unsigned int hash, int intentos);
 
     unsigned int djb2(string dni);
-    int dispersionCuadratica(int hash, int intentos, Cliente *dato);
+    int dispersionCuadratica(const string dni, int hash, int intentos, Cliente *dato);
 private:
     unsigned int _tamTabla;
     unsigned int _numClientes;
