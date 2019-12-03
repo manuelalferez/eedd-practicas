@@ -62,10 +62,22 @@ unsigned int THashCliente::djb2(string *str) {
     return hash;
 }
 
-int THashCliente::dispersionCuadratica(int hash, int intentos, Cliente *dato) {
+unsigned int THashCliente::dispersionCuadratica(const string dni, int hash, int intentos) {
     unsigned int pos = (hash + (intentos * intentos)) % _tamTabla;
-    if(dato){
-
+    if (dni.empty()){
+        if (_tabla->at(pos) == NULL ) {
+            if (intentos > _maxColisiones) _maxColisiones = intentos;
+            return pos;
+        } else {
+            _colisiones++;
+            dispersionCuadratica(dni, hash, intentos + 1);
+        }
+    } else {
+        if (_tabla->at(pos)->getDni() == dni ) {
+            if (intentos > _maxColisiones) _maxColisiones = intentos;
+            return pos;
+        } else
+            dispersionCuadratica(dni, hash, intentos + 1);
     }
 }
 
