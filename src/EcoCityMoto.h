@@ -38,5 +38,4 @@ private:
     vector<Moto> motos;
 };
 
-
-#endif //EEDD_PR1_ECOCITYMOTO_H
+#endif

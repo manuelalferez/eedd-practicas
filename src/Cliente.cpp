@@ -47,10 +47,6 @@ string Cliente::imprimir() {
            to_string(this->posicion.longitud);
 }
 
-double Cliente::calculaDistancia(Cliente &c) {
-    return Utils::calcularDistancia(this->posicion, c.posicion);
-}
-
 void Cliente::crearItinerarios() {
     int num_itinerarios = 1 + rand() % (6 - 1);
     double latitud_random_ini, longitud_random_ini, latitud_random_fin, longitud_random_fin;
@@ -165,10 +161,6 @@ int Cliente::simularMovimiento() {
     auto ultimoItinerario = this->rutas.begin();
     int minutos = 1 + rand() % (int)(ultimoItinerario->getVehiculo()->getPorcentajeBateria() - 1);
     ultimoItinerario->setMinutos(minutos);
-}
-
-string Cliente::mostrar() {
-    return "Nombre: " + this->nombre + ", DNI:  " + this->dni;
 }
 
 void Cliente::addItinerario(Itinerario &itinerario) {

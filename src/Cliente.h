@@ -35,16 +35,10 @@ public:
     bool operator>(const Cliente &c) const;
     bool operator==(const Cliente &c) const;
     string imprimir();
-    void setNombre(string _nombre) { this->nombre = _nombre; };
-    void setDni(string _dni) { this->dni = _dni; };
-    double calculaDistancia(Cliente &c);
-    string getNombre() { return this->nombre; };
     string getDni() { return this->dni; };
     void crearItinerarios();
     void agregarItinerario(UTM inicio, Moto *moto);
     list<Itinerario> &getItinerarios() { return rutas; };
-
-    string mostrar();
     Moto *buscarMotoCercana();
     void desbloquearMoto(Moto &moto);
     void terminarTrayecto(UTM min, UTM max);
