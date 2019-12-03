@@ -2,6 +2,7 @@
 // Created by aabedraba on 3/12/19.
 //
 
+#include <cstring>
 #include "THashCliente.h"
 
 THashCliente::THashCliente(int tamTabla, string tipoInsercion):
@@ -28,7 +29,7 @@ bool THashCliente::insertar(Cliente &cli) {
 
 }
 
-unsigned int THashCliente::dispersonDoble(string dni, unsigned int hash, int intentos) {
+unsigned int THashCliente::dispersonDoble(const string dni, unsigned int hash, int intentos) {
     unsigned int h1 = hash % 57;
     unsigned int h2 = hash % 23;
     unsigned int pos = (h1 + intentos*h2) % _tamTabla;
@@ -53,13 +54,18 @@ unsigned int THashCliente::numClientes() {
     return _numClientes;
 }
 
-unsigned int THashCliente::djb2(string *str) {
-    char cstr[str->size() + 1];
-    strcpy(cstr, str->c_str());
+unsigned int THashCliente::djb2(string dni) {
+    char cstr[dni.size() + 1];
+    strcpy(cstr, dni.c_str());
     unsigned long hash = 5381;
     int c;
     while ((c = *cstr++)) hash = ((hash << 5) + hash) + c;
-    return hash;
+    if ( _tipoDispersion == "doble" ){
+        return dispersonDoble(dni, hash, 0);
+    }
+    else if ( _tipoDispersion == "cuadratica" ){
+        return dispersionCuadratica(dni, hash, 0);
+    }
 }
 
 int THashCliente::dispersionCuadratica(int hash, int intentos, Cliente *dato) {
@@ -69,7 +75,7 @@ int THashCliente::dispersionCuadratica(int hash, int intentos, Cliente *dato) {
     }
 }
 
-int THashCliente::dispersionDoble(int hast, int intentos) {
+int THashCliente::dispersionDoble(int hash, int intentos) {
 
 }
 
