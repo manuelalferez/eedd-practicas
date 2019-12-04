@@ -11,27 +11,39 @@ THashCliente::THashCliente(int tamTabla, string tipoInsercion) :
 
 }
 bool THashCliente::borrar(unsigned long clave, string &dni) {
-
+    unsigned int pos = djb2(dni, "buscar");
+    if (pos != INT_MAX) {
+        delete _tabla.at(pos).second; //TODO no está resulto según implementación
+        return true;
+    }
+    return false;
 }
 
 bool THashCliente::buscar(string &dni, Cliente &*cli) {
-
+    unsigned int pos = djb2(dni, "buscar");
+    if (pos == INT_MAX) {
+        cli = _tabla.at(pos).second; //TODO no está resulto según implementación
+        return true;
+    }
+    return false;
 }
 
 bool THashCliente::insertar(string &dni, Cliente &cli) {
-    unsigned int pos = djb2(cli.getDni(), "insertar");
-    if (_tipoDispersion == "doble") {
-
+    unsigned int pos = djb2(cli.getDni(), "buscar");
+    if (pos == INT_MAX) {
+        pos = djb2(cli.getDni(), "insertar");
+        _tabla.at(pos).firts = cli; //TODO no está resulto según implementación
+        return true;
     }
-
+    return false;
 }
 
 unsigned int THashCliente::dispersonDoble(unsigned int hash, int intentos, const string dni, string modo) {
     unsigned int h1 = hash % 57;
     unsigned int h2 = hash % 23;
-    unsigned int pos = (h1 + intentos*h2) % _tamTabla;
-    if (dni.empty()){
-        if (_tabla->at(pos) == NULL ) {
+    unsigned int pos = (h1 + intentos * h2) % _tamTabla;
+    if (dni.empty()) {
+        if (_tabla->at(pos) == NULL) {
             if (intentos > _maxColisiones) _maxColisiones = intentos;
             return pos;
         } else {
@@ -39,7 +51,7 @@ unsigned int THashCliente::dispersonDoble(unsigned int hash, int intentos, const
             dispersonDoble(hash, intentos + 1, dni, std::__cxx11::string());
         }
     } else {
-        if (_tabla->at(pos)->getDni() == dni ) {
+        if (_tabla->at(pos)->getDni() == dni) {
             if (intentos > _maxColisiones) _maxColisiones = intentos;
             return pos;
         } else
@@ -57,10 +69,9 @@ unsigned int THashCliente::djb2(string dni, string modo) {
     unsigned long hash = 5381;
     int c;
     while ((c = *cstr++)) hash = ((hash << 5) + hash) + c;
-    if ( _tipoDispersion == "doble" ){
+    if (_tipoDispersion == "doble") {
         return dispersonDoble(hash, 0, dni, std::__cxx11::string());
-    }
-    else if ( _tipoDispersion == "cuadratica" ){
+    } else if (_tipoDispersion == "cuadratica") {
         return dispersionCuadratica(dni, hash, 0, modo);
     }
 }
