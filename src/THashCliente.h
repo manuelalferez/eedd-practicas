@@ -18,6 +18,10 @@ public:
     unsigned int numClientes();
     unsigned int maxColisiones();
     unsigned int promedioColisiones();
+
+    unsigned int getTamTabla() const;
+    float factorDeCarga();
+
 private:
     unsigned int dispersionDoble(const string dni, unsigned int hash, unsigned int intentos, string modo);
     unsigned int djb2(string dni, string modo);
