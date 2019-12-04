@@ -8,13 +8,14 @@
 #ifndef EEDD_PR1_ITINERARIO_H
 #define EEDD_PR1_ITINERARIO_H
 
+#include <sstream>
+
 #include "fecha.h"
 #include "Moto.h"
 #include "Utils.h"
-#include <sstream>
+
 
 class Moto;
-
 class Itinerario {
 public:
     Itinerario(int _id, double _latitud_ini, double _longitud_ini, double _latitud_fin,

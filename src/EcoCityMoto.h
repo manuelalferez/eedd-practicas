@@ -10,12 +10,16 @@
 
 #include <map>
 #include <vector>
+#include <fstream>
+#include <algorithm>
+#include <climits>
+
 #include "Moto.h"
 #include "Utils.h"
 #include "THashCliente.h"
-#include <fstream>
 
 class Moto;
+class THashCliente;
 class Cliente;
 class EcoCityMoto {
 public:
@@ -32,10 +36,10 @@ public:
     bool eliminarCliente(string id);
     void guardarItinerarios();
     bool nuevoCliente(Cliente *clienteNuevo);
-
+    THashCliente* getClientes();
 private:
     unsigned int idUltimo;
-    THashCliente clientes;
+    THashCliente* clientes;
     vector<Moto> motos;
 };
 

@@ -5,14 +5,11 @@
  * @note Práctica 3. Arboles AVL
  */
 
-#include <vector>
-#include <algorithm>
-#include <climits>
 #include "EcoCityMoto.h"
 
 EcoCityMoto::EcoCityMoto(string direccionMotos, string direccionClientes, string direccionItinerario) :
-        idUltimo(0), motos(),
-        clientes(20000, "doble") {
+        idUltimo(0), motos() {
+    clientes = new THashCliente(20000, "doble");
     this->construirClientes(direccionClientes);
     this->construirMotos(direccionMotos);
     if (!direccionItinerario.empty()) this->cargarItinerariosClientes(direccionItinerario);
@@ -53,7 +50,7 @@ void EcoCityMoto::construirClientes(string direccionArchivoClientes) {
                 dlat = stold(latitud);
                 dlon = stold(longitud);
                 Cliente *cliente = new Cliente(dni, pass, nombre, direccion, dlat, dlon, this);
-                this->clientes.insertar(cliente->getDni(), cliente);
+                this->clientes->insertar(cliente->getDni(), cliente);
             } //if
         } //while
         cout << "Total de clientes en el fichero: " << total - 1 << endl;
@@ -114,15 +111,15 @@ EcoCityMoto::~EcoCityMoto() {
 }
 
 void EcoCityMoto::guardarItinerarios() {
-    vector<Cliente *> *todosClientes = clientes.getTodosLosClientes();
+    vector<Cliente *> *todosClientes = clientes->getTodosLosClientes();
     string paraImprimir, lineaImprimir;
     for (int i = 0; i < todosClientes->size(); ++i) {
         auto itList = todosClientes->at(i)->getItinerarios().begin();
         while (itList != todosClientes->at(i)->getItinerarios().end()) {
             lineaImprimir += itList->getToPrint();
-            lineaImprimir = todosClientes->at(i)->getDni()+";" + lineaImprimir + "\n";
-            paraImprimir+=lineaImprimir;
-            lineaImprimir="";
+            lineaImprimir = todosClientes->at(i)->getDni() + ";" + lineaImprimir + "\n";
+            paraImprimir += lineaImprimir;
+            lineaImprimir = "";
             itList++;
         }
     }
@@ -149,13 +146,13 @@ Moto *EcoCityMoto::localizaMotoCercana(UTM ubicacion) {
 }
 
 bool EcoCityMoto::eliminarCliente(string id) {
-    return clientes.borrar(id);
+    return clientes->borrar(id);
 }
 
 
 Cliente *EcoCityMoto::buscarCliente(string dni) {
     Cliente *abuscar;
-    bool encontrado = this->clientes.buscar(dni, abuscar);
+    bool encontrado = this->clientes->buscar(dni, abuscar);
     return encontrado ? abuscar : NULL;
 }
 
@@ -196,35 +193,35 @@ void EcoCityMoto::cargarItinerariosClientes(string direccionItinerarios) {
             if (!linea.empty()) {
                 ++total;
             }
-                ss << linea;
-                string camLei;
-                //El carácter ; se lee y se elimina de ss
-                for (int i = 0; i < numCampos; i++) {
-                    getline(ss, camposLeidos[i], ';');
-                    camLei+=camposLeidos[i];
-                }
-                int i = 2, j = 0;
-                while (j < numPosicionesUTM) {
-                    camposPosicionesUTM[j] = stod(camposLeidos[i]);
-                    i++;
-                    j++;
-                }
-                i = 6;
-                j = 0;
-                while (j < numCamposFecha) {
-                    camposFecha[j] = stoi(camposLeidos[i],nullptr, 10);
-                    i++;
-                    j++;
-                }
-                Fecha fecha(camposFecha[2], camposFecha[1], camposFecha[0], camposFecha[3],
-                            camposFecha[4]);
+            ss << linea;
+            string camLei;
+            //El carácter ; se lee y se elimina de ss
+            for (int i = 0; i < numCampos; i++) {
+                getline(ss, camposLeidos[i], ';');
+                camLei += camposLeidos[i];
+            }
+            int i = 2, j = 0;
+            while (j < numPosicionesUTM) {
+                camposPosicionesUTM[j] = stod(camposLeidos[i]);
+                i++;
+                j++;
+            }
+            i = 6;
+            j = 0;
+            while (j < numCamposFecha) {
+                camposFecha[j] = stoi(camposLeidos[i], nullptr, 10);
+                i++;
+                j++;
+            }
+            Fecha fecha(camposFecha[2], camposFecha[1], camposFecha[0], camposFecha[3],
+                        camposFecha[4]);
 
-                Itinerario itinerario(stoi(camposLeidos[posId], nullptr, 10), camposPosicionesUTM[posIniLat],
-                                      camposPosicionesUTM[posIniLon], camposPosicionesUTM[posFinLat],
-                                      camposPosicionesUTM[posFinLon],
-                                      fecha, stoi(camposLeidos[posMinutosMov],nullptr, 10), nullptr);
-                if ( camposLeidos[posDni].empty() ) continue;
-                buscarCliente(camposLeidos[posDni])->addItinerario(itinerario);
+            Itinerario itinerario(stoi(camposLeidos[posId], nullptr, 10), camposPosicionesUTM[posIniLat],
+                                  camposPosicionesUTM[posIniLon], camposPosicionesUTM[posFinLat],
+                                  camposPosicionesUTM[posFinLon],
+                                  fecha, stoi(camposLeidos[posMinutosMov], nullptr, 10), nullptr);
+            if (camposLeidos[posDni].empty()) continue;
+            buscarCliente(camposLeidos[posDni])->addItinerario(itinerario);
         } //while
         cout << "Total de itinerarios en el fichero: " << total - 1 << endl;
         fe.close();
@@ -234,7 +231,7 @@ void EcoCityMoto::cargarItinerariosClientes(string direccionItinerarios) {
 }
 
 void EcoCityMoto::crearItinerariosClientes() {
-    vector<Cliente *> *todoCliente = clientes.getTodosLosClientes();
+    vector<Cliente *> *todoCliente = clientes->getTodosLosClientes();
     for (int i = 0; i < todoCliente->size(); ++i)
         todoCliente->at(i)->crearItinerarios();
 
@@ -249,5 +246,9 @@ vector<Moto> EcoCityMoto::localizaMotosSinBateria() {
 }
 
 bool EcoCityMoto::nuevoCliente(Cliente *clienteNuevo) {
-    return clientes.insertar(clienteNuevo->getDni(), clienteNuevo);;
+    return clientes->insertar(clienteNuevo->getDni(), clienteNuevo);;
+}
+
+THashCliente* EcoCityMoto::getClientes() {
+    return clientes;
 }

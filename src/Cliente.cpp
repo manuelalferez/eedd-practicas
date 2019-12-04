@@ -157,7 +157,7 @@ void Cliente::terminarTrayecto(UTM min, UTM max) {
     ultimoItinerario->getVehiculo()->actualizaBateria(ultimoItinerario->getMinutos());
 }
 
-int Cliente::simularMovimiento() {
+void Cliente::simularMovimiento() {
     auto ultimoItinerario = this->rutas.begin();
     int minutos = 1 + rand() % (int)(ultimoItinerario->getVehiculo()->getPorcentajeBateria() - 1);
     ultimoItinerario->setMinutos(minutos);

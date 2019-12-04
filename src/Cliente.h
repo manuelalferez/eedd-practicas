@@ -11,20 +11,18 @@
 #include <iostream>
 #include <cmath>
 #include <string>
-#include<cstdlib>
+#include <cstdlib>
 #include <cfloat>
 #include <sstream>
-#include "fecha.h"
+#include <list>
+
 #include "Itinerario.h"
 #include "EcoCityMoto.h"
-#include <list>
 
 using namespace std;
 
-class Itinerario;
 class EcoCityMoto;
 class Itinerario;
-
 class Cliente {
 public:
     Cliente() : dni(""), pass(""), nombre(""), direccion(""), posicion(0, 0), rutas(), acceso(0) {};
@@ -42,7 +40,7 @@ public:
     Moto *buscarMotoCercana();
     void desbloquearMoto(Moto &moto);
     void terminarTrayecto(UTM min, UTM max);
-    int simularMovimiento();
+    void simularMovimiento();
     UTM getUTM(UTM min, UTM max);
 
     void addItinerario(Itinerario& itinerario);

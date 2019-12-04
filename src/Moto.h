@@ -18,7 +18,6 @@ enum estados {
 //struct UTM;
 
 class Cliente;
-
 class Moto {
 public:
     Moto() : id(""), posicion(), estatus(bloqueada), cliente(0) {}
