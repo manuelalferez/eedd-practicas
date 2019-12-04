@@ -18,11 +18,9 @@ public:
     unsigned int numClientes();
 
 private:
-    void hash(unsigned long clave, int intento);
-    unsigned int dispersonDoble(const string dni, unsigned int hash, int intentos);
-
+    unsigned int dispersonDoble(const string dni, unsigned int hash, unsigned int intentos, string modo);
     unsigned int djb2(string dni, string modo);
-    int dispersionCuadratica(const string dni, int hash, int intentos, Cliente *dato);
+    int dispersionCuadratica(const string dni, int hash, unsigned int intentos, string modo);
 private:
     unsigned int _tamTabla;
     unsigned int _numClientes;
