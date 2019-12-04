@@ -65,6 +65,14 @@ int main(int argc, char **argv) {
     for(int i=0;i<5;i++){
         cout<<mis_clientes->at(i)->getDni()<<endl;
     }
+    string aBorrar = "46860472R";
+    tabla_clientes->borrar(aBorrar);
+
+    cout << "Numero total de elementos: " << tabla_clientes->getNumClientes() << endl;
+    cout << "Numero total de colisiones: " << tabla_clientes->getColisiones() << endl;
+    cout << "Maximo de colisiones: " << tabla_clientes->maxColisiones() << endl;
+    cout << "Promedio de colisiones: " << tabla_clientes->promedioColisiones() << endl;
+    cout << "Factor de carga: " << tabla_clientes->factorDeCarga() << endl;
 
     return 0;
 } // main

@@ -23,12 +23,13 @@ unsigned int THashCliente::maxColisiones(){
     return _maxColisiones;
 }
 
-unsigned int THashCliente::promedioColisiones(){
-    return _colisiones/_numInserciones;
+float THashCliente::promedioColisiones(){
+    return float(_colisiones)/float(_numInserciones);
 }
 
 bool THashCliente::borrar(string &dni) {
-    unsigned int pos = djb2(dni, "buscar");
+    unsigned int pos;
+    pos = djb2(dni, "busqueda");
     if (pos != INT_MAX) {
         delete _tabla->at(pos).second;
         _tabla->at(pos).first = "disponible";
@@ -77,7 +78,7 @@ unsigned int THashCliente::dispersionDoble(const string dni, const unsigned int 
         }
     } else if (modo == "busqueda") {
         if (_tabla->at(pos).first == "disponible")
-            dispersionDoble(dni, hash, intentos + 1, modo);
+            return dispersionDoble(dni, hash, intentos + 1, modo);
         else if (_tabla->at(pos).first == "ocupada") {
             if (_tabla->at(pos).second->getDni() == dni)
                 return pos;
@@ -144,7 +145,7 @@ void THashCliente::redispersion(int nuevo) {
 }
 
 float THashCliente::factorDeCarga() {
-    return _numClientes/_tamTabla;
+    return float(_numClientes)/float(_tamTabla);
 }
 
 THashCliente::~THashCliente() {
@@ -165,4 +166,12 @@ vector<Cliente *> *THashCliente::getTodosLosClientes() {
 
 unsigned int THashCliente::getTamTabla() const {
     return _tamTabla;
+}
+
+unsigned int THashCliente::getColisiones() const {
+    return _colisiones;
+}
+
+unsigned int THashCliente::getNumClientes() const {
+    return _numClientes;
 }

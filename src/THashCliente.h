@@ -18,9 +18,14 @@ public:
     bool borrar(string &dni);
     unsigned int numClientes();
     unsigned int maxColisiones();
-    unsigned int promedioColisiones();
+    float promedioColisiones();
 
     unsigned int getTamTabla() const;
+
+    unsigned int getColisiones() const;
+
+    unsigned int getNumClientes() const;
+
     float factorDeCarga();
     vector<Cliente *> * getTodosLosClientes();
 
