@@ -221,7 +221,9 @@ void EcoCityMoto::cargarItinerariosClientes(string direccionItinerarios) {
                                   camposPosicionesUTM[posFinLon],
                                   fecha, stoi(camposLeidos[posMinutosMov], nullptr, 10), nullptr);
             if (camposLeidos[posDni].empty()) continue;
-            buscarCliente(camposLeidos[posDni])->addItinerario(itinerario);
+            Cliente *aBuscar;
+            clientes->buscar(camposLeidos[posDni], aBuscar);
+            aBuscar->addItinerario(itinerario);
         } //while
         cout << "Total de itinerarios en el fichero: " << total - 1 << endl;
         fe.close();

@@ -62,9 +62,9 @@ int main(int argc, char **argv) {
     THashCliente* tabla_clientes = empresaMotos.getClientes();
     vector<Cliente*>* mis_clientes = tabla_clientes->getTodosLosClientes();
 
-/*    for(int i=0;i<5;i++){
+    for(int i=0;i<5;i++){
         cout<<mis_clientes->at(i)->getDni()<<endl;
-    }*/
+    }
 
     return 0;
 } // main

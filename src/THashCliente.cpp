@@ -39,9 +39,9 @@ bool THashCliente::borrar(string &dni) {
     return false;
 }
 
-bool THashCliente::buscar(string &dni, Cliente *cli) {
-    unsigned int pos = djb2(dni, "buscar");
-    if (pos == INT_MAX) {
+bool THashCliente::buscar(string &dni, Cliente *&cli) {
+    unsigned int pos = djb2(dni, "busqueda");
+    if (pos != INT_MAX) {
         cli = _tabla->at(pos).second;
         return true;
     }
@@ -49,9 +49,9 @@ bool THashCliente::buscar(string &dni, Cliente *cli) {
 }
 
 bool THashCliente::insertar(string dni, Cliente *cli) {
-    unsigned int pos = djb2(cli->getDni(), "buscar");
-    if (pos == INT_MAX) {
-        pos = djb2(cli->getDni(), "insertar");
+//    unsigned int pos = djb2(cli->getDni(), "busqueda");
+//    if (pos == INT_MAX) {
+        unsigned int pos = djb2(cli->getDni(), "insertar");
         _tabla->at(pos).second = cli;
         _tabla->at(pos).first = "ocupada";
         _numInserciones++;
@@ -60,21 +60,20 @@ bool THashCliente::insertar(string dni, Cliente *cli) {
             redispersion(_tamTabla * 2);
 
         return true;
-    }
-    return false;
+    //return false;
 }
 
-unsigned int THashCliente::dispersionDoble(const string dni, unsigned int hash, unsigned int intentos, string modo) {
-    unsigned int h1 = hash % 57;
-    unsigned int h2 = hash % 23;
-    unsigned int pos = (h1 + intentos * h2) % _tamTabla;
+unsigned int THashCliente::dispersionDoble(const string dni, const unsigned int hash, const unsigned int intentos, const string modo) {
+    const unsigned int h1 = hash % 103007;
+    const unsigned int h2 = hash % 102181;
+    const unsigned int pos = (h1 + intentos * h2) % _tamTabla;
     if (modo == "insertar") {
         if (_tabla->at(pos).first == "disponible" || _tabla->at(pos).first == "vacia") {
             if (intentos > _maxColisiones) _maxColisiones = intentos;
             return pos;
         } else {
             _colisiones++;
-            dispersionDoble(dni, hash, intentos + 1, modo);
+            return dispersionDoble(dni, hash, (intentos + 1), modo);
         }
     } else if (modo == "busqueda") {
         if (_tabla->at(pos).first == "disponible")
@@ -83,9 +82,9 @@ unsigned int THashCliente::dispersionDoble(const string dni, unsigned int hash, 
             if (_tabla->at(pos).second->getDni() == dni)
                 return pos;
             else
-                dispersionDoble(dni, hash, intentos + 1, modo);
+                return dispersionDoble(dni, hash, intentos + 1, modo);
         }
-        if (modo == "vacia") {
+        else if (_tabla->at(pos).first == "vacia") {
             return INT_MAX;
         }
     }
@@ -95,7 +94,7 @@ unsigned int THashCliente::numClientes() {
     return _numClientes;
 }
 
-unsigned int THashCliente::djb2(string dni, string modo) {
+unsigned int THashCliente::djb2(const string dni, const string modo) {
     const char *str = dni.c_str();
     unsigned long hash = 5381;
     int c;

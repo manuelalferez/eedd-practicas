@@ -14,7 +14,7 @@ public:
     THashCliente(int tamTabla, string tipoInsercion);
     virtual ~THashCliente();
     bool insertar(string dni, Cliente *cli);
-    bool buscar(string &dni, Cliente *cli);
+    bool buscar(string &dni, Cliente *&cli);
     bool borrar(string &dni);
     unsigned int numClientes();
     unsigned int maxColisiones();
@@ -25,8 +25,8 @@ public:
     vector<Cliente *> * getTodosLosClientes();
 
 private:
-    unsigned int dispersionDoble(const string dni, unsigned int hash, unsigned int intentos, string modo);
-    unsigned int djb2(string dni, string modo);
+    unsigned int dispersionDoble(const string dni, const unsigned int hash, const unsigned int intentos, const string modo);
+    unsigned int djb2(const string dni, const string modo);
     unsigned int dispersionCuadratica(const string dni, int hash, unsigned int intentos, string modo);
     void redispersion(int nuevo);
     void inicializacion();
