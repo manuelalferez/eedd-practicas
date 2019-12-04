@@ -9,8 +9,17 @@
 THashCliente::THashCliente(int tamTabla, string tipoInsercion) :
         _tamTabla(tamTabla),
         _tipoDispersion(tipoInsercion) {
-
+    inicializacion();
 }
+
+void THashCliente::inicializacion() {
+    _tabla = new vector<pair<string, Cliente *>>(_tamTabla);
+    for (int i = 0; i < _tamTabla; i++) {
+        _tabla->at(i).first = "vacia";
+        _tabla->at(i).second = nullptr;
+    }
+}
+
 bool THashCliente::borrar(unsigned long clave, string &dni) {
     unsigned int pos = djb2(dni, "buscar");
     if (pos != INT_MAX) {
@@ -47,25 +56,25 @@ bool THashCliente::insertar(string &dni, Cliente &cli) {
 unsigned int THashCliente::dispersionDoble(const string dni, unsigned int hash, unsigned int intentos, string modo) {
     unsigned int h1 = hash % 57;
     unsigned int h2 = hash % 23;
-    unsigned int pos = (h1 + intentos*h2) % _tamTabla;
-    if (modo == "insertar"){
-        if (_tabla->at(pos).first == "disponible" || _tabla->at(pos).first == "vacio" ) {
+    unsigned int pos = (h1 + intentos * h2) % _tamTabla;
+    if (modo == "insertar") {
+        if (_tabla->at(pos).first == "disponible" || _tabla->at(pos).first == "vacio") {
             if (intentos > _maxColisiones) _maxColisiones = intentos;
             return pos;
         } else {
             _colisiones++;
             dispersionDoble(dni, hash, intentos + 1, modo);
         }
-    } else if (modo == "busqueda"){
-        if ( _tabla->at(pos).first == "disponible")
+    } else if (modo == "busqueda") {
+        if (_tabla->at(pos).first == "disponible")
             dispersionDoble(dni, hash, intentos + 1, modo);
-        else if (_tabla->at(pos).first == "ocupado"){
+        else if (_tabla->at(pos).first == "ocupado") {
             if (_tabla->at(pos).second->getDni() == dni)
                 return pos;
             else
                 dispersionDoble(dni, hash, intentos + 1, modo);
         }
-        if (modo == "vacio" ) {
+        if (modo == "vacio") {
             return INT_MAX;
         }
     }
@@ -101,13 +110,13 @@ unsigned int THashCliente::dispersionCuadratica(const string dni, int hash, int 
     } else if (modo == "busqueda") {
         if (_tabla->at(pos).first == "disponible")
             dispersionCuadratica(dni, hash, intentos + 1, modo);
-        else if (_tabla->at(pos).first == "ocupada") {
+        else if (_tabla->at(pos).first == "ocupado") {
             if (_tabla->at(pos).second->getDni() == dni)
                 return pos;
             else
                 dispersionCuadratica(dni, hash, intentos + 1, modo);
         }
-        if (modo == VACIO) {
+        if (modo == "vacio") {
             return INT_MAX;
         }
     }
