@@ -19,6 +19,13 @@ void THashCliente::inicializacion() {
         _tabla->at(i).second = nullptr;
     }
 }
+unsigned int THashCliente::maxColisiones(){
+    return _maxColisiones;
+}
+
+unsigned int THashCliente::promedioColisiones(){
+    return _colisiones/_numInserciones;
+}
 
 bool THashCliente::borrar(unsigned long clave, string &dni) {
     unsigned int pos = djb2(dni, "buscar");

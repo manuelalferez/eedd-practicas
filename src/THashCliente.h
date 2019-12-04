@@ -16,7 +16,8 @@ public:
     bool buscar(string &dni, Cliente *cli);
     bool borrar(unsigned long clave, string &dni);
     unsigned int numClientes();
-
+    unsigned int maxColisiones();
+    unsigned int promedioColisiones();
 private:
     unsigned int dispersionDoble(const string dni, unsigned int hash, unsigned int intentos, string modo);
     unsigned int djb2(string dni, string modo);
