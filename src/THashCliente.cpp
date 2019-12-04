@@ -26,8 +26,7 @@ bool THashCliente::borrar(unsigned long clave, string &dni) {
         delete _tabla->at(pos).second;
         _tabla->at(pos).first = "disponible";
         _numClientes--;
-        int factorDeCarga = _numClientes/_tamTabla;
-        if (factorDeCarga < 0.33) redispersion(_tamTabla/2);
+        if (factorDeCarga() < 0.33) redispersion(_tamTabla/2);
         return true;
     }
     return false;
@@ -50,8 +49,7 @@ bool THashCliente::insertar(string dni, Cliente &cli) {
         _tabla->at(pos).first = "ocupada";
         _numInserciones++;
         _numClientes++;
-        int factorDeCarga = _numClientes / _tamTabla;
-        if (factorDeCarga > 0.7)
+        if (factorDeCarga() > 0.7)
             redispersion(_tamTabla * 2);
 
         return true;
@@ -140,9 +138,17 @@ void THashCliente::redispersion(int nuevo) {
     delete (copia);
 }
 
+float THashCliente::factorDeCarga() {
+    return _numClientes/_tamTabla;
+}
+
 THashCliente::~THashCliente() {
     for (int i = 0; i < _tamTabla; ++i) {
         delete _tabla->at(i).second;
     }
     delete _tabla;
+}
+
+unsigned int THashCliente::getTamTabla() const {
+    return _tamTabla;
 }
