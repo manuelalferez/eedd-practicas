@@ -27,7 +27,7 @@ unsigned int THashCliente::promedioColisiones(){
     return _colisiones/_numInserciones;
 }
 
-bool THashCliente::borrar(unsigned long clave, string &dni) {
+bool THashCliente::borrar(string &dni) {
     unsigned int pos = djb2(dni, "buscar");
     if (pos != INT_MAX) {
         delete _tabla->at(pos).second;
@@ -48,11 +48,11 @@ bool THashCliente::buscar(string &dni, Cliente *cli) {
     return false;
 }
 
-bool THashCliente::insertar(string dni, Cliente &cli) {
-    unsigned int pos = djb2(cli.getDni(), "buscar");
+bool THashCliente::insertar(string dni, Cliente *cli) {
+    unsigned int pos = djb2(cli->getDni(), "buscar");
     if (pos == INT_MAX) {
-        pos = djb2(cli.getDni(), "insertar");
-        _tabla->at(pos).second = &cli;
+        pos = djb2(cli->getDni(), "insertar");
+        _tabla->at(pos).second = cli;
         _tabla->at(pos).first = "ocupada";
         _numInserciones++;
         _numClientes++;
@@ -96,11 +96,10 @@ unsigned int THashCliente::numClientes() {
 }
 
 unsigned int THashCliente::djb2(string dni, string modo) {
-    char cstr[dni.size() + 1];
-    strcpy(cstr, dni.c_str());
+    const char *str = dni.c_str();
     unsigned long hash = 5381;
     int c;
-    while ((c = *cstr++)) hash = ((hash << 5) + hash) + c;
+    while ((c = *str++)) hash = ((hash << 5) + hash) + c;
     if (_tipoDispersion == "doble") {
         return dispersionDoble(dni, hash, 0, modo);
     } else if (_tipoDispersion == "cuadratica") {
@@ -140,7 +139,7 @@ void THashCliente::redispersion(int nuevo) {
     inicializacion();
     for (int i = 0; i < copia->size(); ++i) {
         if (copia->at(i).first == "ocupada")
-            insertar(copia->at(i).second->getDni(), *copia->at(i).second);
+            insertar(copia->at(i).second->getDni(), copia->at(i).second);
     }
     delete (copia);
 }
@@ -154,6 +153,15 @@ THashCliente::~THashCliente() {
         delete _tabla->at(i).second;
     }
     delete _tabla;
+}
+
+vector<Cliente *> *THashCliente::getTodosLosClientes() {
+    vector<Cliente *> *aDevolver = new vector<Cliente*>;
+    for (int i = 0; i < _tamTabla; ++i) {
+        if (_tabla->at(i).first == "ocupada")
+            aDevolver->push_back(_tabla->at(i).second);
+    }
+    return aDevolver;
 }
 
 unsigned int THashCliente::getTamTabla() const {

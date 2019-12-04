@@ -12,6 +12,7 @@
 #include <vector>
 #include "Moto.h"
 #include "Utils.h"
+#include "THashCliente.h"
 #include <fstream>
 
 class Moto;
@@ -34,7 +35,7 @@ public:
 
 private:
     unsigned int idUltimo;
-    map<string, Cliente*> clientes;
+    THashCliente clientes;
     vector<Moto> motos;
 };
 

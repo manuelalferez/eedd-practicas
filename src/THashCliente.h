@@ -8,19 +8,21 @@
 #include <string>
 #include "Cliente.h"
 
+class Cliente;
 class THashCliente {
 public:
     THashCliente(int tamTabla, string tipoInsercion);
     virtual ~THashCliente();
-    bool insertar(string dni, Cliente &cli);
+    bool insertar(string dni, Cliente *cli);
     bool buscar(string &dni, Cliente *cli);
-    bool borrar(unsigned long clave, string &dni);
+    bool borrar(string &dni);
     unsigned int numClientes();
     unsigned int maxColisiones();
     unsigned int promedioColisiones();
 
     unsigned int getTamTabla() const;
     float factorDeCarga();
+    vector<Cliente *> * getTodosLosClientes();
 
 private:
     unsigned int dispersionDoble(const string dni, unsigned int hash, unsigned int intentos, string modo);
@@ -28,7 +30,7 @@ private:
     unsigned int dispersionCuadratica(const string dni, int hash, unsigned int intentos, string modo);
     void redispersion(int nuevo);
     void inicializacion();
-private:
+
     unsigned int _tamTabla;
     unsigned int _numClientes;
     vector<pair<string, Cliente *>> *_tabla;
