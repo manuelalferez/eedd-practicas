@@ -12,7 +12,7 @@ class THashCliente {
 public:
     THashCliente(int tamTabla, string tipoInsercion);
     virtual ~THashCliente();
-    bool insertar(string &dni, Cliente &cli);
+    bool insertar(string dni, Cliente &cli);
     bool buscar(string &dni, Cliente *cli);
     bool borrar(unsigned long clave, string &dni);
     unsigned int numClientes();
@@ -20,7 +20,8 @@ public:
 private:
     unsigned int dispersionDoble(const string dni, unsigned int hash, unsigned int intentos, string modo);
     unsigned int djb2(string dni, string modo);
-    int dispersionCuadratica(const string dni, int hash, unsigned int intentos, string modo);
+    unsigned int dispersionCuadratica(const string dni, int hash, unsigned int intentos, string modo);
+    void redispersion(int nuevo);
 private:
     unsigned int _tamTabla;
     unsigned int _numClientes;
