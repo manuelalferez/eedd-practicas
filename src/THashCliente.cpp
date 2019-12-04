@@ -3,6 +3,7 @@
 //
 
 #include <cstring>
+#include <climits>
 #include "THashCliente.h"
 
 THashCliente::THashCliente(int tamTabla, string tipoInsercion) :
@@ -26,24 +27,30 @@ bool THashCliente::insertar(string &dni, Cliente &cli) {
 
 }
 
-unsigned int THashCliente::dispersonDoble(unsigned int hash, int intentos, const string dni, string modo) {
+unsigned int THashCliente::dispersonDoble(const string dni, unsigned int hash, unsigned int intentos, string modo) {
     unsigned int h1 = hash % 57;
     unsigned int h2 = hash % 23;
     unsigned int pos = (h1 + intentos*h2) % _tamTabla;
-    if (dni.empty()){
-        if (_tabla->at(pos) == NULL ) {
+    if (modo == "insertar"){
+        if (_tabla->at(pos).first == DISPONIBLE || _tabla->at(pos).first == VACIO ) {
             if (intentos > _maxColisiones) _maxColisiones = intentos;
             return pos;
         } else {
             _colisiones++;
-            dispersonDoble(hash, intentos + 1, dni, std::__cxx11::string());
+            dispersonDoble(dni, hash, intentos + 1, modo);
         }
-    } else {
-        if (_tabla->at(pos)->getDni() == dni ) {
-            if (intentos > _maxColisiones) _maxColisiones = intentos;
-            return pos;
-        } else
-            dispersonDoble(hash, intentos + 1, dni, std::__cxx11::string());
+    } else if (modo == "busqueda"){
+        if ( _tabla->at(pos).first == DISPONIBLE)
+            dispersonDoble(dni, hash, intentos+1, modo);
+        else if (_tabla->at(pos).first == OCUPADO){
+            if (_tabla->at(pos).second->getDni() == dni)
+                return pos;
+            else
+                dispersonDoble(dni, hash, intentos+1, modo);
+        }
+        if (modo == VACIO ) {
+            return INT_MAX;
+        }
     }
 }
 

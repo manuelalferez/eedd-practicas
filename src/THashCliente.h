@@ -24,7 +24,7 @@ private:
 private:
     unsigned int _tamTabla;
     unsigned int _numClientes;
-    vector<Cliente *> *_tabla;
+    vector<pair<string, Cliente *>> *_tabla;
     unsigned int _maxColisiones;
     unsigned int _colisiones;
     unsigned int _numInserciones;
