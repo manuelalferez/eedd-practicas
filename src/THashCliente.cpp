@@ -5,10 +5,9 @@
 #include <cstring>
 #include "THashCliente.h"
 
-THashCliente::THashCliente(int tamTabla, string tipoInsercion):
+THashCliente::THashCliente(int tamTabla, string tipoInsercion) :
         _tamTabla(tamTabla),
-        _tipoDispersion(tipoInsercion)
-{
+        _tipoDispersion(tipoInsercion) {
 
 }
 
@@ -20,10 +19,13 @@ bool THashCliente::borrar(unsigned long clave, string &dni) {
 
 }
 
-bool THashCliente::insertar(Cliente &cli) {
+bool THashCliente::buscar(string &dni, Cliente &*cli) {
 
-    unsigned int pos = djb2(cli.getDni(), cli);
-    if (_tipoDispersion == "doble"){
+}
+
+bool THashCliente::insertar(string &dni, Cliente &cli) {
+    unsigned int pos = djb2(cli.getDni(), "insertar");
+    if (_tipoDispersion == "doble") {
 
     }
 
@@ -32,9 +34,9 @@ bool THashCliente::insertar(Cliente &cli) {
 unsigned int THashCliente::dispersonDoble(const string dni, unsigned int hash, int intentos) {
     unsigned int h1 = hash % 57;
     unsigned int h2 = hash % 23;
-    unsigned int pos = (h1 + intentos*h2) % _tamTabla;
-    if (dni.empty()){
-        if (_tabla->at(pos) == NULL ) {
+    unsigned int pos = (h1 + intentos * h2) % _tamTabla;
+    if (dni.empty()) {
+        if (_tabla->at(pos) == NULL) {
             if (intentos > _maxColisiones) _maxColisiones = intentos;
             return pos;
         } else {
@@ -42,7 +44,7 @@ unsigned int THashCliente::dispersonDoble(const string dni, unsigned int hash, i
             dispersonDoble(dni, hash, intentos + 1);
         }
     } else {
-        if (_tabla->at(pos)->getDni() == dni ) {
+        if (_tabla->at(pos)->getDni() == dni) {
             if (intentos > _maxColisiones) _maxColisiones = intentos;
             return pos;
         } else
@@ -60,18 +62,17 @@ unsigned int THashCliente::djb2(string dni) {
     unsigned long hash = 5381;
     int c;
     while ((c = *cstr++)) hash = ((hash << 5) + hash) + c;
-    if ( _tipoDispersion == "doble" ){
+    if (_tipoDispersion == "doble") {
         return dispersonDoble(dni, hash, 0);
-    }
-    else if ( _tipoDispersion == "cuadratica" ){
+    } else if (_tipoDispersion == "cuadratica") {
         return dispersionCuadratica(dni, hash, 0);
     }
 }
 
 unsigned int THashCliente::dispersionCuadratica(const string dni, int hash, int intentos) {
     unsigned int pos = (hash + (intentos * intentos)) % _tamTabla;
-    if (dni.empty()){
-        if (_tabla->at(pos) == NULL ) {
+    if (dni.empty()) {
+        if (_tabla->at(pos) == NULL) {
             if (intentos > _maxColisiones) _maxColisiones = intentos;
             return pos;
         } else {
@@ -79,7 +80,7 @@ unsigned int THashCliente::dispersionCuadratica(const string dni, int hash, int 
             dispersionCuadratica(dni, hash, intentos + 1);
         }
     } else {
-        if (_tabla->at(pos)->getDni() == dni ) {
+        if (_tabla->at(pos)->getDni() == dni) {
             if (intentos > _maxColisiones) _maxColisiones = intentos;
             return pos;
         } else
