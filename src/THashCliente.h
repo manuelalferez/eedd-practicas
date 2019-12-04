@@ -22,6 +22,7 @@ private:
     unsigned int djb2(string dni, string modo);
     unsigned int dispersionCuadratica(const string dni, int hash, unsigned int intentos, string modo);
     void redispersion(int nuevo);
+    void inicializacion();
 private:
     unsigned int _tamTabla;
     unsigned int _numClientes;
