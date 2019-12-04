@@ -26,6 +26,8 @@ bool THashCliente::borrar(unsigned long clave, string &dni) {
         delete _tabla->at(pos).second;
         _tabla->at(pos).first = "disponible";
         _numClientes--;
+        int factorDeCarga = _numClientes/_tamTabla;
+        if (factorDeCarga < 0.33) redispersion(_tamTabla/2);
         return true;
     }
     return false;
