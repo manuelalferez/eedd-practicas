@@ -1,6 +1,4 @@
-//
-// Created by aabedraba on 3/12/19.
-//
+
 
 #include <cstring>
 #include <climits>
@@ -19,12 +17,12 @@ void THashCliente::inicializacion() {
         _tabla->at(i).second = nullptr;
     }
 }
-unsigned int THashCliente::maxColisiones(){
+unsigned int THashCliente::maxColisiones() {
     return _maxColisiones;
 }
 
-float THashCliente::promedioColisiones(){
-    return float(_colisiones)/float(_numInserciones);
+float THashCliente::promedioColisiones() {
+    return float(_colisiones) / float(_numInserciones);
 }
 
 bool THashCliente::borrar(string &dni) {
@@ -34,7 +32,7 @@ bool THashCliente::borrar(string &dni) {
         delete _tabla->at(pos).second;
         _tabla->at(pos).first = "disponible";
         _numClientes--;
-        if (factorDeCarga() < 0.33) redispersion(_tamTabla/2);
+        if (factorDeCarga() < 0.6) redispersion(_tamTabla / 2);
         return true;
     }
     return false;
@@ -50,8 +48,8 @@ bool THashCliente::buscar(string &dni, Cliente *&cli) {
 }
 
 bool THashCliente::insertar(string dni, Cliente *cli) {
-//    unsigned int pos = djb2(cli->getDni(), "busqueda");
-//    if (pos == INT_MAX) {
+    unsigned int pos = djb2(cli->getDni(), "busqueda");
+    if (pos == INT_MAX) {
         unsigned int pos = djb2(cli->getDni(), "insertar");
         _tabla->at(pos).second = cli;
         _tabla->at(pos).first = "ocupada";
@@ -59,12 +57,13 @@ bool THashCliente::insertar(string dni, Cliente *cli) {
         _numClientes++;
         if (factorDeCarga() > 0.7)
             redispersion(_tamTabla * 2);
-
         return true;
-    //return false;
+    }
+    return false;
 }
 
-unsigned int THashCliente::dispersionDoble(const string dni, const unsigned int hash, const unsigned int intentos, const string modo) {
+unsigned int THashCliente::dispersionDoble(const string dni, const unsigned int hash, const unsigned int intentos,
+                                           const string modo) {
     const unsigned int h1 = hash % 103007;
     const unsigned int h2 = hash % 102181;
     const unsigned int pos = (h1 + intentos * h2) % _tamTabla;
@@ -84,8 +83,7 @@ unsigned int THashCliente::dispersionDoble(const string dni, const unsigned int 
                 return pos;
             else
                 return dispersionDoble(dni, hash, intentos + 1, modo);
-        }
-        else if (_tabla->at(pos).first == "vacia") {
+        } else if (_tabla->at(pos).first == "vacia") {
             return INT_MAX;
         }
     }
@@ -142,10 +140,11 @@ void THashCliente::redispersion(int nuevo) {
             insertar(copia->at(i).second->getDni(), copia->at(i).second);
     }
     delete (copia);
+    cout<<"Redispersión aplicada"<<endl;
 }
 
 float THashCliente::factorDeCarga() {
-    return float(_numClientes)/float(_tamTabla);
+    return float(_numClientes) / float(_tamTabla);
 }
 
 THashCliente::~THashCliente() {
@@ -156,7 +155,7 @@ THashCliente::~THashCliente() {
 }
 
 vector<Cliente *> *THashCliente::getTodosLosClientes() {
-    vector<Cliente *> *aDevolver = new vector<Cliente*>;
+    vector<Cliente *> *aDevolver = new vector<Cliente *>;
     for (int i = 0; i < _tamTabla; ++i) {
         if (_tabla->at(i).first == "ocupada")
             aDevolver->push_back(_tabla->at(i).second);

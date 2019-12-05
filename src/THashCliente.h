@@ -1,6 +1,3 @@
-//
-// Created by aabedraba on 3/12/19.
-//
 
 #ifndef EEDD_PR1_THASHCLIENTE_H
 #define EEDD_PR1_THASHCLIENTE_H

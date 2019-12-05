@@ -43,7 +43,7 @@ bool Cliente::operator==(const Cliente &c) const {
 
 string Cliente::imprimir() {
     return "DNI: " + this->dni + ", Pass: " + this->pass + ", Nombre: " + this->nombre +
-           ", Dirección: " + this->direccion + "Latitud: " + to_string(this->posicion.latitud) + ", Longitud: " +
+           ", Dirección: " + this->direccion + ", Latitud: " + to_string(this->posicion.latitud) + ", Longitud: " +
            to_string(this->posicion.longitud);
 }
 

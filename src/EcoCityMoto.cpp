@@ -9,7 +9,7 @@
 
 EcoCityMoto::EcoCityMoto(string direccionMotos, string direccionClientes, string direccionItinerario) :
         idUltimo(0), motos() {
-    clientes = new THashCliente(20000, "doble");
+    clientes = new THashCliente(16500, "doble");
     this->construirClientes(direccionClientes);
     this->construirMotos(direccionMotos);
     if (!direccionItinerario.empty()) this->cargarItinerariosClientes(direccionItinerario);

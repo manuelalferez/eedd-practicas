@@ -7,10 +7,9 @@
 #include "Moto.h"
 
 Moto::Moto(string _id, int _estatus, double _latitud, double _longitud) :
-    id(_id), posicion(_latitud, _longitud),
-    estatus((estados) _estatus), cliente(0),
-    porcentajeBateria(rand()%100+1)
-    {}
+        id(_id), posicion(_latitud, _longitud),
+        estatus((estados) _estatus), cliente(0),
+        porcentajeBateria(rand() % 100 + 1) {}
 Moto::~Moto() {}
 
 bool Moto::seActiva(Cliente &cli) {
@@ -29,9 +28,9 @@ bool Moto::estaDisponible() {
 }
 
 void Moto::actualizaBateria(int minutos) {
-    if(this){
+    if (this) {
         this->porcentajeBateria -= minutos;
-        if ( this->porcentajeBateria <= 15 ) estatus = sinBateria;
+        if (this->porcentajeBateria <= 15) estatus = sinBateria;
     }
 }
 
@@ -41,4 +40,11 @@ estados Moto::getEstatus() const {
 
 float Moto::getPorcentajeBateria() const {
     return porcentajeBateria;
+}
+
+string Moto::imprimir() {
+    return "id: " + this->id + ", Estado: " + to_string(this->estatus) + ", Cliente: " + this->cliente->getDni() +
+           ", Porcentaje batería: " + to_string(this->porcentajeBateria) + ", Latitud: " + to_string(this->posicion.latitud) +
+           ", Longitud: " +
+           to_string(this->posicion.longitud);
 }

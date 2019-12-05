@@ -32,7 +32,7 @@ public:
     float getPorcentajeBateria() const;
     estados getEstatus() const;
     void setPosicion(UTM posicion) { this->posicion = posicion; }
-
+    string imprimir();
 private:
     string id;
     UTM posicion;
