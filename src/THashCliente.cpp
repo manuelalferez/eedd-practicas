@@ -113,18 +113,17 @@ unsigned int THashCliente::dispersionCuadratica(const string dni, int hash, unsi
             return pos;
         } else {
             _colisiones++;
-            dispersionCuadratica(dni, hash, intentos + 1, modo);
+            return dispersionCuadratica(dni, hash, (intentos + 1), modo);
         }
     } else if (modo == "busqueda") {
         if (_tabla->at(pos).first == "disponible")
-            dispersionCuadratica(dni, hash, intentos + 1, modo);
+            return dispersionCuadratica(dni, hash, intentos + 1, modo);
         else if (_tabla->at(pos).first == "ocupada") {
             if (_tabla->at(pos).second->getDni() == dni)
                 return pos;
             else
-                dispersionCuadratica(dni, hash, intentos + 1, modo);
-        }
-        if (modo == "vacia") {
+                return dispersionCuadratica(dni, hash, intentos + 1, modo);
+        } else if (_tabla->at(pos).first == "vacia") {
             return INT_MAX;
         }
     }
