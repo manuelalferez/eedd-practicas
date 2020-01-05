@@ -14,6 +14,7 @@ _Esta asignatura pertenece al segundo curso de Ingeniería informática impartid
 **5. Tabla Hash** 
 
 **6. Mallas regulares** 
+
 Sin implementar
 
 ## Autores ✒️
